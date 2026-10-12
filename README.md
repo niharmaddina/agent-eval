@@ -8,7 +8,7 @@ no network and no API key, provider and tool failures are recorded rather than r
 committed baselines regenerate byte-for-byte in CI. Real model providers (Anthropic,
 OpenAI-compatible) plug in behind the same interface.
 
-Status: v0.1.0, Python 3.11, `mypy --strict` and `ruff` clean, 80 offline tests, CI on every push.
+Status: v0.1.0, Python 3.11, `mypy --strict` and `ruff` clean, 81 offline tests, CI on every push.
 
 ```bash
 python3.11 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]"
