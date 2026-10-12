@@ -1,12 +1,19 @@
 # agent-eval
 
-Offline-first harness for evaluating tool-calling LLM agents. It ships a deterministic tool
-sandbox (in-memory file system, safe calculator, fake ticketing API), a tiered task suite with
-programmatic checkers, a bounded tool-use loop with step and token budgets, and a reporter that
-produces a markdown table and a JSON document per run. The whole suite runs with no network and
-no API key; real model providers plug in behind the same interface.
+An offline-first harness for evaluating tool-calling LLM agents. Give it a provider and it runs
+a tiered task suite through a bounded tool loop against a deterministic sandbox (in-memory file
+system, safe calculator, fake ticketing API), checks the final state and answer programmatically,
+and writes a markdown report, a JSON summary and a per-task transcript. The whole suite runs with
+no network and no API key, provider and tool failures are recorded rather than raised, and the
+committed baselines regenerate byte-for-byte in CI. Real model providers (Anthropic,
+OpenAI-compatible) plug in behind the same interface.
 
-Status: v0.1.0, Python 3.11, typed (`mypy --strict` clean), `ruff` clean, 57 offline tests.
+Status: v0.1.0, Python 3.11, `mypy --strict` and `ruff` clean, 80 offline tests, CI on every push.
+
+```bash
+python3.11 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]"
+agent-eval run --provider scripted --suite agent_eval/tasks/basic.yaml --out results/scripted/
+```
 
 ## Motivation
 
@@ -65,7 +72,10 @@ valid ones against the sandbox, converts `ToolError` into an error result the ag
 and appends the results. It stops when the provider answers without tool calls (`answered`),
 when `max_steps` or `max_tokens` is reached (`step_budget`, `token_budget`), when the provider
 fails (`provider_error`), or on a refusal or truncated answer. Validation failures and domain
-tool errors are counted separately.
+tool errors are counted separately. The loop fails closed: an exception escaping a provider or a
+tool is recorded in the transcript (as `provider_error`, or as an error tool result the agent can
+read) instead of propagating, so one bad task cannot abort a suite run; a malformed check fails
+its task with a `checker:` reason rather than raising.
 
 The message format is provider-agnostic (`Message` with `tool_calls` and `tool_results`).
 Each provider converts to and from its wire format; the Anthropic provider keeps the native
@@ -83,13 +93,16 @@ pytest && ruff check . && mypy agent_eval
 ```
 
 `--only t1_read_readme,t3_ticket_404` and `--tier 3` restrict a run. Each run writes
-`report.md`, `results.json` and `transcripts/<task_id>.json` to `--out`.
+`report.md`, `results.json` and `transcripts/<task_id>.json` to `--out`. Output is fully
+deterministic except for the `Generated:` timestamp; set `SOURCE_DATE_EPOCH` to pin that too. CI
+regenerates both committed baselines with the timestamp pinned to the committed one and fails on
+any `git diff` under `results/`, so the baselines always match the code at the same commit.
 
 ## Results: scripted baselines
 
-These are deterministic replay runs produced on 2026-10-12 with the
-command lines above. They characterise the harness and the suite. **They are not model
-results.** Token counts for replay providers are a length/4 estimate and cost is zero because
+These are deterministic replay runs produced on 2026-10-12 with the command lines above
+(timestamp pinned with `SOURCE_DATE_EPOCH=1791765279`). They characterise the harness and the
+suite. **They are not model results.** Token counts for replay providers are a length/4 estimate and cost is zero because
 no API is called.
 
 ### `scripted` (generated 2026-10-12T00:34:39Z)
@@ -163,8 +176,10 @@ Check kinds: `file_equals`, `file_contains`, `file_absent`, `file_line_count`,
 (regex), `ticket_field`, `ticket_note_contains`, `ticket_note_count`. All checks must pass.
 In scripted answers, `{last}` and `{rN}` are replaced with the last / N-th successful tool
 result so the replayed answer depends on what the tools returned. `agent-eval check-suite`
-validates the file; `tests/test_tasks_e2e.py` additionally asserts that every tier-1 and
-tier-2 script is schema-valid and that every tier-3 script hits at least one error.
+validates the file before anything runs: required keys, known tiers, check kinds and their
+arguments (including regex syntax), script steps, and that every name in `tools:` exists.
+`tests/test_tasks_e2e.py` additionally asserts that every tier-1 and tier-2 script is
+schema-valid and that every tier-3 script hits at least one error.
 
 ## Adding a tool
 
@@ -213,8 +228,16 @@ fallback model, so every outcome is attributable to the model under test. `resul
 and `results/openai_compat/` are git-ignored; commit model results deliberately and label them
 with the model id and date.
 
+The Anthropic provider sends `max_tokens=16000` because current Claude models think by default
+and thinking counts against that limit; the loop's own token budget bounds the whole run.
+
 Neither key was set in the environment that produced this repository, so no model has been run
-through the harness yet; the two provider modules are exercised by their conversion tests only.
+through the harness yet. The two provider modules are exercised offline in two ways: conversion
+tests on the neutral-to-wire message shapes, and a round trip through the real SDK over a mock
+HTTP transport (`tests/test_providers.py`) that asserts the request body (`system`, `tools`,
+`tool_use` and `tool_result` blocks, thinking blocks echoed back unchanged) and the parsed
+response, including an HTTP error path. Those two tests need the SDK extras installed and skip
+otherwise; CI installs them.
 
 ## Limitations
 
@@ -225,9 +248,10 @@ through the harness yet; the two provider modules are exercised by their convers
   explicit state check; there is no LLM judge.
 - Token counts for replay providers are a heuristic; cost figures depend on a hand-maintained
   price table.
-- The model providers have not been run live in this repository. Their request shapes follow
-  the current SDK documentation (anthropic 1.13, openai 3.29) but a first live run may surface
-  issues.
+- The model providers have not been run live in this repository. Their request and response
+  shapes are verified offline against the installed SDKs (anthropic 1.13, openai 3.29) through
+  a mock HTTP transport, but a first live run may still surface issues such as rate limits or
+  model-specific stop reasons.
 - One process, sequential tasks, no retries at the provider layer beyond the SDK defaults.
 - The sandbox is text-only: no binary files, no permissions, no concurrency.
 

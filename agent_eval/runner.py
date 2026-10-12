@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import os
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +29,13 @@ def run_task(provider: Provider, task: Task) -> RunRecord:
     return record
 
 
+def generated_at() -> str:
+    """UTC timestamp for a run. ``SOURCE_DATE_EPOCH`` pins it so baselines diff byte-for-byte."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    now = dt.datetime.fromtimestamp(int(epoch), dt.UTC) if epoch else dt.datetime.now(dt.UTC)
+    return now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def run_suite(
     provider: Provider,
     suite: Suite,
@@ -47,7 +55,7 @@ def run_suite(
         "model": provider.model,
         "suite": suite.name,
         "suite_version": suite.version,
-        "generated_at": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": generated_at(),
         "agent_eval_version": __version__,
         "is_model_result": not provider.name.startswith("scripted"),
     }

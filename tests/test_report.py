@@ -44,6 +44,15 @@ def test_markdown_and_json_outputs(tmp_path):
     assert rendered == md
 
 
+def test_source_date_epoch_makes_two_runs_byte_identical(tmp_path, monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1791765279")
+    result = run_suite(ScriptedProvider(), SUITE, tmp_path / "a", only=set(IDS))
+    assert result["meta"]["generated_at"] == "2026-10-12T00:34:39Z"
+    run_suite(ScriptedProvider(), SUITE, tmp_path / "b", only=set(IDS))
+    for name in ("report.md", "results.json", "transcripts/t1_read_readme.json"):
+        assert (tmp_path / "a" / name).read_bytes() == (tmp_path / "b" / name).read_bytes()
+
+
 def test_cli_run_and_checks(tmp_path, capsys, monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     assert main(["check-suite"]) == 0

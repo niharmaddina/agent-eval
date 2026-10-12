@@ -14,6 +14,8 @@ from agent_eval.providers.base import ProviderError, ProviderUnavailable, estima
 from agent_eval.types import Message, ProviderResponse, ToolCall, Usage
 
 if TYPE_CHECKING:
+    import openai
+
     from agent_eval.tasks import Task
 
 
@@ -45,7 +47,7 @@ def to_openai(messages: list[Message]) -> list[Any]:
 class OpenAICompatProvider:
     name = "openai_compat"
 
-    def __init__(self, model: str | None = None) -> None:
+    def __init__(self, model: str | None = None, client: openai.OpenAI | None = None) -> None:
         if not os.environ.get("OPENAI_API_KEY"):
             raise ProviderUnavailable(
                 "OPENAI_API_KEY is not set; the openai_compat provider is off"
@@ -58,7 +60,7 @@ class OpenAICompatProvider:
         if not self.model:
             raise ProviderUnavailable("set AGENT_EVAL_OPENAI_MODEL to the model id to evaluate")
         self._sdk = openai
-        self._client = openai.OpenAI()
+        self._client = client if client is not None else openai.OpenAI()
 
     def start_task(self, task: Task) -> None:
         return None

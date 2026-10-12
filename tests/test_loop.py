@@ -3,6 +3,7 @@ from fakes import ListProvider, answer, call
 
 from agent_eval.agent import run_loop
 from agent_eval.tools import Sandbox, ToolRegistry
+from agent_eval.tools.base import Tool, obj_schema
 from agent_eval.types import Budget, Message, ToolCall
 
 
@@ -78,6 +79,43 @@ def test_provider_error_and_refusal_and_truncation():
     rec, _ = go(ListProvider([answer("")], stop_reasons=["refusal"]))
     assert rec.stop_reason == "refusal"
     rec, _ = go(ListProvider([answer("partial")], stop_reasons=["max_tokens"]))
+    assert rec.stop_reason == "truncated" and rec.final_answer == "partial"
+
+
+class _ExplodingProvider:
+    """Raises something that is not a ProviderError, like an SDK or conversion bug would."""
+
+    name = "exploding"
+    model = "exploding-model"
+
+    def start_task(self, task):
+        return None
+
+    def complete(self, messages, tools):
+        raise RuntimeError("sdk exploded")
+
+
+def test_unexpected_provider_exception_is_recorded_not_raised():
+    rec, _ = go(_ExplodingProvider())
+    assert rec.stop_reason == "provider_error" and rec.steps == 1 and rec.final_answer == ""
+    assert rec.transcript[0]["error"] == "unexpected RuntimeError: sdk exploded"
+
+
+def test_unexpected_tool_exception_is_recorded_not_raised():
+    def boom(sb, args):
+        raise KeyError("oops")
+
+    reg = ToolRegistry([Tool("boom", "always fails", obj_schema({}, []), boom)])
+    p = ListProvider([call("boom"), answer("ok")])
+    rec = run_loop(p, reg, Sandbox.fresh(), "q", Budget(), task_id="t")
+    assert rec.stop_reason == "answered" and rec.tool_errors == 1 and rec.validation_errors == 0
+    result = rec.transcript[1]
+    assert result["is_error"] and result["content"] == "internal tool error (KeyError): 'oops'"
+
+
+def test_context_window_exceeded_counts_as_truncated():
+    p = ListProvider([answer("partial")], stop_reasons=["model_context_window_exceeded"])
+    rec, _ = go(p)
     assert rec.stop_reason == "truncated" and rec.final_answer == "partial"
 
 

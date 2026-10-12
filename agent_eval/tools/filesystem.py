@@ -33,6 +33,11 @@ class InMemoryFS:
         path = _norm(path)
         if path == "/" or self._is_dir(path):
             raise ToolError(f"{path} is a directory")
+        parts = path.split("/")[1:-1]
+        for i in range(1, len(parts) + 1):
+            ancestor = "/" + "/".join(parts[:i])
+            if ancestor in self.files:
+                raise ToolError(f"{ancestor} is a file, not a directory")
         self.files[path] = content
 
     def listdir(self, path: str) -> list[str]:

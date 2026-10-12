@@ -13,6 +13,8 @@ from agent_eval.providers.base import ProviderError, ProviderUnavailable
 from agent_eval.types import Message, ProviderResponse, ToolCall, Usage
 
 if TYPE_CHECKING:
+    import anthropic
+
     from agent_eval.tasks import Task
 
 DEFAULT_MODEL = "claude-opus-5"
@@ -60,7 +62,12 @@ def to_anthropic(messages: list[Message]) -> tuple[str, list[Any]]:
 class AnthropicProvider:
     name = "anthropic"
 
-    def __init__(self, model: str | None = None, max_output_tokens: int = 4096) -> None:
+    def __init__(
+        self,
+        model: str | None = None,
+        max_output_tokens: int = 16_000,
+        client: anthropic.Anthropic | None = None,
+    ) -> None:
         if not os.environ.get("ANTHROPIC_API_KEY"):
             raise ProviderUnavailable("ANTHROPIC_API_KEY is not set; the anthropic provider is off")
         try:
@@ -68,9 +75,10 @@ class AnthropicProvider:
         except ImportError as exc:
             raise ProviderUnavailable("install with: pip install 'agent-eval[anthropic]'") from exc
         self._sdk = anthropic
-        self._client = anthropic.Anthropic()
+        self._client = client if client is not None else anthropic.Anthropic()
         self.model = model or os.environ.get("AGENT_EVAL_ANTHROPIC_MODEL", DEFAULT_MODEL)
-        # Eval answers are short by construction; the loop's token budget bounds the whole run.
+        # Current Claude models think by default and thinking counts against max_tokens, so this
+        # follows the SDK's non-streaming guidance; the loop's token budget bounds the whole run.
         self.max_output_tokens = max_output_tokens
 
     def start_task(self, task: Task) -> None:
@@ -94,13 +102,16 @@ class AnthropicProvider:
             raise ProviderError(f"anthropic HTTP {exc.status_code}: {exc.message}") from exc
         except self._sdk.APIConnectionError as exc:
             raise ProviderError(f"anthropic connection error: {exc}") from exc
+        except self._sdk.APIError as exc:  # e.g. a response that fails SDK validation
+            raise ProviderError(f"anthropic API error: {exc}") from exc
 
-        text = "".join(b.text for b in resp.content if b.type == "text")
-        calls = [
-            ToolCall(id=b.id, name=b.name, arguments=dict(b.input))
-            for b in resp.content
-            if b.type == "tool_use"
-        ]
-        msg = Message("assistant", text, tool_calls=calls, raw=list(resp.content))
+        text_parts: list[str] = []
+        calls: list[ToolCall] = []
+        for block in resp.content:  # thinking and other block types are kept only in ``raw``
+            if block.type == "text":
+                text_parts.append(block.text)
+            elif block.type == "tool_use":
+                calls.append(ToolCall(id=block.id, name=block.name, arguments=dict(block.input)))
+        msg = Message("assistant", "".join(text_parts), tool_calls=calls, raw=list(resp.content))
         usage = Usage(resp.usage.input_tokens, resp.usage.output_tokens)
         return ProviderResponse(msg, usage, stop_reason=resp.stop_reason or "end_turn")

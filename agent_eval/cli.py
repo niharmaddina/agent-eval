@@ -6,6 +6,8 @@ import argparse
 import sys
 from pathlib import Path
 
+import yaml
+
 from agent_eval.providers import PROVIDER_NAMES, ProviderUnavailable, get_provider
 from agent_eval.runner import run_suite
 from agent_eval.tasks import DEFAULT_SUITE, TIERS, load_suite
@@ -37,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     try:
         suite = load_suite(args.suite)
-    except (OSError, ValueError, KeyError) as exc:
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
         print(f"suite error: {exc}", file=sys.stderr)
         return 2
 

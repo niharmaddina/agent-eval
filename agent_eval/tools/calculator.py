@@ -47,10 +47,18 @@ def evaluate(expression: str) -> float:
         tree = ast.parse(expression.strip(), mode="eval")
     except SyntaxError as exc:
         raise ToolError(f"invalid expression: {exc.msg}") from exc
+    except (ValueError, RecursionError, MemoryError) as exc:
+        raise ToolError(f"invalid expression: {exc}") from exc
     try:
         return _eval(tree.body)
     except ZeroDivisionError as exc:
         raise ToolError("division by zero") from exc
+    except OverflowError as exc:
+        raise ToolError("result too large") from exc
+    except RecursionError as exc:
+        raise ToolError("expression too deeply nested") from exc
+    except (TypeError, ValueError) as exc:  # e.g. min() with no arguments, abs(1, 2)
+        raise ToolError(f"invalid call: {exc}") from exc
 
 
 def _format(value: float) -> str:

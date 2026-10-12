@@ -15,6 +15,9 @@ from agent_eval.tools import Sandbox, ToolError, ToolRegistry
 from agent_eval.tools.schema import validate
 from agent_eval.types import Budget, Message, RunRecord, StopReason, ToolCall, ToolResult, Usage
 
+# Provider stop reasons that mean the answer was cut off rather than finished.
+_TRUNCATED = frozenset({"max_tokens", "model_context_window_exceeded"})
+
 SYSTEM_PROMPT = (
     "You are an agent completing a task inside a sandbox. Use the provided tools to inspect "
     "and change state. Tool errors are returned as text; read them and recover (for example "
@@ -48,6 +51,10 @@ class _Executor:
         except ToolError as exc:
             self.tool_errors += 1
             return ToolResult(call.id, f"error: {exc}", is_error=True)
+        except Exception as exc:  # a bug inside a tool ends the call, not the run
+            self.tool_errors += 1
+            detail = f"internal tool error ({type(exc).__name__}): {exc}"
+            return ToolResult(call.id, detail, is_error=True)
 
 
 def run_loop(
@@ -77,6 +84,11 @@ def run_loop(
             transcript.append({"step": step, "type": "provider_error", "error": str(exc)})
             stop = "provider_error"
             break
+        except Exception as exc:  # fail closed: a provider bug ends the task, not the suite
+            error = f"unexpected {type(exc).__name__}: {exc}"
+            transcript.append({"step": step, "type": "provider_error", "error": error})
+            stop = "provider_error"
+            break
         usage.add(response.usage)
         msg = response.message
         messages.append(msg)
@@ -97,7 +109,7 @@ def run_loop(
             break
         if not msg.tool_calls:
             final_answer = msg.content
-            stop = "truncated" if response.stop_reason == "max_tokens" else "answered"
+            stop = "truncated" if response.stop_reason in _TRUNCATED else "answered"
             break
         results: list[ToolResult] = []
         for call in msg.tool_calls:

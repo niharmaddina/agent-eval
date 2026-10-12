@@ -8,10 +8,12 @@ from typing import Any
 
 import yaml
 
-from agent_eval.tasks.checkers import CHECK_KINDS, run_checks
+from agent_eval.tasks.checkers import run_checks, validate_check
+from agent_eval.tools import ALL_TOOLS
 from agent_eval.types import Budget
 
 TIERS = {1: "single tool", 2: "multi-step", 3: "error recovery"}
+KNOWN_TOOLS = frozenset(t.name for t in ALL_TOOLS)
 DEFAULT_SUITE = Path(__file__).parent / "basic.yaml"
 
 
@@ -44,12 +46,28 @@ def _parse_task(raw: dict[str, Any]) -> Task:
             raise ValueError(f"task {raw.get('id', '?')}: missing '{key}'")
     if raw["tier"] not in TIERS:
         raise ValueError(f"task {raw['id']}: tier must be one of {sorted(TIERS)}")
+    if not raw["check"]:
+        raise ValueError(f"task {raw['id']}: needs at least one check")
     for check in raw["check"]:
-        if len(check) != 1 or next(iter(check)) not in CHECK_KINDS:
-            raise ValueError(f"task {raw['id']}: bad check {check!r}")
+        if not isinstance(check, dict) or len(check) != 1:
+            raise ValueError(f"task {raw['id']}: a check is a one-key mapping, got {check!r}")
+        kind, arg = next(iter(check.items()))
+        problem = validate_check(kind, arg)
+        if problem:
+            raise ValueError(f"task {raw['id']}: {problem}")
     for step in raw["script"]:
-        if ("call" in step) == ("answer" in step):
+        if not isinstance(step, dict) or ("call" in step) == ("answer" in step):
             raise ValueError(f"task {raw['id']}: script step needs exactly one of call/answer")
+        call = step.get("call")
+        if call is not None and (
+            not isinstance(call, dict)
+            or not isinstance(call.get("tool"), str)
+            or not isinstance(call.get("args", {}), dict)
+        ):
+            raise ValueError(f"task {raw['id']}: script call needs 'tool' and mapping 'args'")
+    unknown_tools = [t for t in raw.get("tools") or [] if t not in KNOWN_TOOLS]
+    if unknown_tools:
+        raise ValueError(f"task {raw['id']}: unknown tools {unknown_tools}")
     budget_raw = raw.get("budget", {})
     budget = Budget(
         max_steps=int(budget_raw.get("max_steps", Budget.max_steps)),
@@ -80,4 +98,4 @@ def load_suite(path: Path | str = DEFAULT_SUITE) -> Suite:
     )
 
 
-__all__ = ["DEFAULT_SUITE", "TIERS", "Suite", "Task", "load_suite", "run_checks"]
+__all__ = ["DEFAULT_SUITE", "KNOWN_TOOLS", "TIERS", "Suite", "Task", "load_suite", "run_checks"]

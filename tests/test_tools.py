@@ -57,6 +57,9 @@ def test_fs_errors():
         fs.read("/a/../b.txt")
     with pytest.raises(ToolError, match="is a directory"):
         fs.write("/a", "x")
+    with pytest.raises(ToolError, match=r"/a/b\.txt is a file, not a directory"):
+        fs.write("/a/b.txt/c.txt", "x")
+    assert fs.listdir("/a") == ["b.txt"]  # the refused write left no trace
 
 
 def test_sandbox_is_fresh_per_instance():
@@ -95,6 +98,11 @@ def test_calculator_values(sb, expr, expected):
         ("2 ** 100", "exponent too large"),
         ("x + 1", "unsupported"),
         ("round(1.5, ndigits=0)", "keyword"),
+        ("1e300 ** 2", "result too large"),
+        ("-(1e300 ** 2)", "result too large"),
+        ("min()", "invalid call"),
+        ("abs(1, 2)", "invalid call"),
+        ("round(1.5, 2, 3)", "invalid call"),
     ],
 )
 def test_calculator_rejects(expr, msg):
