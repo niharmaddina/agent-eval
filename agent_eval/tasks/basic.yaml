@@ -1,0 +1,335 @@
+# Basic suite. Three tiers:
+#   1 single tool      - one correct call and a grounded answer
+#   2 multi-step       - chain reads, computation and writes; state and answer both checked
+#   3 error recovery   - the obvious first call fails (missing file, 404 ticket, bad argument);
+#                        the agent must read the error and take another route
+# Every task carries a `script` used by the scripted replay providers. `{last}` and `{rN}` in a
+# scripted answer are replaced with the content of the last / N-th successful tool result.
+suite: basic
+version: 1
+tasks:
+  # ---------------------------------------------------------------- tier 1: single tool
+  - id: t1_read_readme
+    tier: 1
+    prompt: Read /docs/readme.txt and tell me who owns Project Atlas.
+    check:
+      - answer_contains: "ops team"
+    script:
+      - call: {tool: fs_read, args: {path: /docs/readme.txt}}
+      - answer: "The readme says: {last}"
+
+  - id: t1_list_data
+    tier: 1
+    prompt: List the files in /data.
+    check:
+      - answer_contains: ["sales_q1.csv", "sales_q2.csv"]
+    script:
+      - call: {tool: fs_list, args: {path: /data}}
+      - answer: "Files in /data: {last}"
+
+  - id: t1_write_hello
+    tier: 1
+    prompt: Create /tmp/hello.txt containing exactly the text "hello, world" followed by a newline.
+    check:
+      - file_equals: {path: /tmp/hello.txt, content: "hello, world\n"}
+    script:
+      - call: {tool: fs_write, args: {path: /tmp/hello.txt, content: "hello, world\n"}}
+      - answer: "Created /tmp/hello.txt."
+
+  - id: t1_search_login
+    tier: 1
+    prompt: Which file under / mentions a login bug? Give the path.
+    check:
+      - answer_contains: "/docs/changelog.md"
+    script:
+      - call: {tool: fs_search, args: {query: "login bug"}}
+      - answer: "Found in: {last}"
+
+  - id: t1_calc_percent
+    tier: 1
+    prompt: What is 17.5% of 2480? Use the calculator.
+    check:
+      - answer_contains: "434"
+    script:
+      - call: {tool: calculator, args: {expression: "2480 * 0.175"}}
+      - answer: "17.5% of 2480 is {last}."
+
+  - id: t1_calc_power
+    tier: 1
+    prompt: Compute 2**10 + 7*6 with the calculator and report the result.
+    check:
+      - answer_contains: "1066"
+    script:
+      - call: {tool: calculator, args: {expression: "2**10 + 7*6"}}
+      - answer: "{last}"
+
+  - id: t1_ticket_get
+    tier: 1
+    prompt: What is the priority of ticket T-1003?
+    check:
+      - answer_contains: "urgent"
+    script:
+      - call: {tool: tickets_get, args: {id: T-1003}}
+      - answer: "Ticket T-1003: {last}"
+
+  - id: t1_ticket_list_open
+    tier: 1
+    prompt: List the ids of all tickets whose status is open.
+    check:
+      - answer_contains: ["T-1001", "T-1003", "T-1007"]
+      - answer_not_contains: ["T-1002", "T-1004", "T-1005", "T-1006"]
+    script:
+      - call: {tool: tickets_list, args: {status: open}}
+      - answer: "Open tickets:\n{last}"
+
+  - id: t1_ticket_note
+    tier: 1
+    prompt: Add the note "Customer called again on Monday" to ticket T-1001.
+    check:
+      - ticket_note_contains: {id: T-1001, text: "Customer called again"}
+      - ticket_note_count: {id: T-1001, equals: 1}
+    script:
+      - call: {tool: tickets_add_note, args: {id: T-1001, text: "Customer called again on Monday"}}
+      - answer: "Note added to T-1001."
+
+  - id: t1_ticket_priority
+    tier: 1
+    prompt: Raise the priority of ticket T-1007 to medium.
+    check:
+      - ticket_field: {id: T-1007, field: priority, equals: medium}
+      - ticket_field: {id: T-1007, field: status, equals: open}
+    script:
+      - call: {tool: tickets_update, args: {id: T-1007, priority: medium}}
+      - answer: "T-1007 is now medium priority."
+
+  # ---------------------------------------------------------------- tier 2: multi-step
+  - id: t2_sum_q1
+    tier: 2
+    prompt: Read /data/sales_q1.csv and report the total amount across all regions.
+    check:
+      - answer_contains: "2480"
+    script:
+      - call: {tool: fs_read, args: {path: /data/sales_q1.csv}}
+      - call: {tool: calculator, args: {expression: "1200 + 850 + 430"}}
+      - answer: "Q1 total: {last}"
+
+  - id: t2_q1_vs_q2
+    tier: 2
+    prompt: By how much did the total in /data/sales_q2.csv exceed the total in /data/sales_q1.csv?
+    check:
+      - answer_contains: "530"
+    script:
+      - call: {tool: fs_read, args: {path: /data/sales_q1.csv}}
+      - call: {tool: fs_read, args: {path: /data/sales_q2.csv}}
+      - call: {tool: calculator, args: {expression: "(1500 + 900 + 610) - (1200 + 850 + 430)"}}
+      - answer: "Q2 exceeded Q1 by {last}."
+
+  - id: t2_summary_file
+    tier: 2
+    prompt: >
+      Read /docs/readme.txt and /docs/changelog.md, then write /docs/summary.txt containing one
+      line of the form "<project> <latest version>: <latest change>" followed by a newline.
+    check:
+      - file_equals: {path: /docs/summary.txt, content: "Project Atlas 1.2.0: Added export\n"}
+    script:
+      - call: {tool: fs_read, args: {path: /docs/readme.txt}}
+      - call: {tool: fs_read, args: {path: /docs/changelog.md}}
+      - call: {tool: fs_write, args: {path: /docs/summary.txt, content: "Project Atlas 1.2.0: Added export\n"}}
+      - answer: "Wrote /docs/summary.txt."
+
+  - id: t2_copy_file
+    tier: 2
+    prompt: Copy /notes/todo.txt to /notes/todo_backup.txt without changing its content.
+    check:
+      - file_equals: {path: /notes/todo_backup.txt, content: "- renew certificates\n- rotate API keys\n- archive old tickets\n"}
+      - file_equals: {path: /notes/todo.txt, content: "- renew certificates\n- rotate API keys\n- archive old tickets\n"}
+    script:
+      - call: {tool: fs_read, args: {path: /notes/todo.txt}}
+      - call: {tool: fs_write, args: {path: /notes/todo_backup.txt, content: "- renew certificates\n- rotate API keys\n- archive old tickets\n"}}
+      - answer: "Backup written."
+
+  - id: t2_append_todo
+    tier: 2
+    prompt: Append the line "- update runbook" to /notes/todo.txt, keeping the existing lines.
+    check:
+      - file_line_count: {path: /notes/todo.txt, equals: 4}
+      - file_contains: {path: /notes/todo.txt, text: "- update runbook"}
+      - file_contains: {path: /notes/todo.txt, text: "- renew certificates"}
+    script:
+      - call: {tool: fs_read, args: {path: /notes/todo.txt}}
+      - call: {tool: fs_write, args: {path: /notes/todo.txt, content: "- renew certificates\n- rotate API keys\n- archive old tickets\n- update runbook\n"}}
+      - answer: "Appended."
+
+  - id: t2_reassign_dana
+    tier: 2
+    prompt: Reassign every ticket currently assigned to dana to lee.
+    check:
+      - ticket_field: {id: T-1001, field: assignee, equals: lee}
+      - ticket_field: {id: T-1003, field: assignee, equals: lee}
+      - ticket_field: {id: T-1004, field: assignee, equals: sam}
+    script:
+      - call: {tool: tickets_list, args: {assignee: dana}}
+      - call: {tool: tickets_update, args: {id: T-1001, assignee: lee}}
+      - call: {tool: tickets_update, args: {id: T-1003, assignee: lee}}
+      - answer: "Reassigned T-1001 and T-1003 to lee."
+
+  - id: t2_resolve_with_note
+    tier: 2
+    prompt: Look at ticket T-1002, add the note "Fix deployed in 1.2.0", then mark it resolved.
+    check:
+      - ticket_note_contains: {id: T-1002, text: "Fix deployed in 1.2.0"}
+      - ticket_field: {id: T-1002, field: status, equals: resolved}
+    script:
+      - call: {tool: tickets_get, args: {id: T-1002}}
+      - call: {tool: tickets_add_note, args: {id: T-1002, text: "Fix deployed in 1.2.0"}}
+      - call: {tool: tickets_update, args: {id: T-1002, status: resolved}}
+      - answer: "T-1002 annotated and resolved."
+
+  - id: t2_config_bump
+    tier: 2
+    prompt: Double the "retries" value in /config/app.json (use the calculator) and write the file back with the other keys unchanged.
+    check:
+      - file_contains: {path: /config/app.json, text: "\"retries\": 6"}
+      - file_contains: {path: /config/app.json, text: "\"env\": \"staging\""}
+      - file_contains: {path: /config/app.json, text: "\"timeout_s\": 30"}
+    script:
+      - call: {tool: fs_read, args: {path: /config/app.json}}
+      - call: {tool: calculator, args: {expression: "3 * 2"}}
+      - call: {tool: fs_write, args: {path: /config/app.json, content: "{\"env\": \"staging\", \"retries\": 6, \"timeout_s\": 30}\n"}}
+      - answer: "retries is now {r1}."
+
+  - id: t2_open_tickets_report
+    tier: 2
+    prompt: Write the ids of all open tickets, one per line, to /reports/open_tickets.txt and tell me how many there are.
+    check:
+      - file_line_count: {path: /reports/open_tickets.txt, equals: 3}
+      - file_contains: {path: /reports/open_tickets.txt, text: "T-1007"}
+      - answer_matches: "\\b3\\b"
+    script:
+      - call: {tool: tickets_list, args: {status: open}}
+      - call: {tool: fs_write, args: {path: /reports/open_tickets.txt, content: "T-1001\nT-1003\nT-1007\n"}}
+      - answer: "There are 3 open tickets; ids written to /reports/open_tickets.txt."
+
+  - id: t2_north_average
+    tier: 2
+    prompt: Average the north region amounts from /data/sales_q1.csv and /data/sales_q2.csv, write the number to /reports/north_avg.txt (with a trailing newline) and report it.
+    check:
+      - file_equals: {path: /reports/north_avg.txt, content: "1350\n"}
+      - answer_contains: "1350"
+    script:
+      - call: {tool: fs_read, args: {path: /data/sales_q1.csv}}
+      - call: {tool: fs_read, args: {path: /data/sales_q2.csv}}
+      - call: {tool: calculator, args: {expression: "(1200 + 1500) / 2"}}
+      - call: {tool: fs_write, args: {path: /reports/north_avg.txt, content: "1350\n"}}
+      - answer: "North average: {r2}"
+
+  # ---------------------------------------------------------------- tier 3: error recovery
+  - id: t3_missing_file
+    tier: 3
+    notes: The requested file does not exist; the right one is next to it.
+    prompt: Read /notes/todo.md and list the todo items.
+    check:
+      - answer_contains: ["renew certificates", "rotate API keys", "archive old tickets"]
+    script:
+      - call: {tool: fs_read, args: {path: /notes/todo.md}}
+      - call: {tool: fs_list, args: {path: /notes}}
+      - call: {tool: fs_read, args: {path: /notes/todo.txt}}
+      - answer: "The todo items are:\n{last}"
+
+  - id: t3_wrong_dir
+    tier: 3
+    notes: The directory name is wrong; recover by listing the root.
+    prompt: List /documents and read the readme file you find there.
+    check:
+      - answer_contains: "Project Atlas"
+    script:
+      - call: {tool: fs_list, args: {path: /documents}}
+      - call: {tool: fs_list, args: {path: /}}
+      - call: {tool: fs_list, args: {path: /docs}}
+      - call: {tool: fs_read, args: {path: /docs/readme.txt}}
+      - answer: "There is no /documents; /docs/readme.txt says: {last}"
+
+  - id: t3_dir_as_file
+    tier: 3
+    notes: Reading a directory fails; list it, then read the file.
+    prompt: Read /docs and tell me the latest version in the changelog.
+    check:
+      - answer_contains: "1.2.0"
+    script:
+      - call: {tool: fs_read, args: {path: /docs}}
+      - call: {tool: fs_list, args: {path: /docs}}
+      - call: {tool: fs_read, args: {path: /docs/changelog.md}}
+      - answer: "Latest version from the changelog: {last}"
+
+  - id: t3_search_fallback
+    tier: 3
+    notes: Missing file; recover via search, then compute.
+    prompt: Open /data/sales_2024.csv and report its total amount. If the file is missing, find the file that contains the row "north,1500" and use that one instead.
+    check:
+      - answer_contains: ["sales_q2.csv", "3010"]
+    script:
+      - call: {tool: fs_read, args: {path: /data/sales_2024.csv}}
+      - call: {tool: fs_search, args: {query: "north,1500"}}
+      - call: {tool: fs_read, args: {path: /data/sales_q2.csv}}
+      - call: {tool: calculator, args: {expression: "1500 + 900 + 610"}}
+      - answer: "/data/sales_2024.csv does not exist; used /data/sales_q2.csv, total {last}."
+
+  - id: t3_ticket_404
+    tier: 3
+    notes: 404 on the first id; recover by listing tickets.
+    prompt: Set the priority of ticket T-1010 to high. If that ticket does not exist, apply the change to the ticket about the dark mode toggle instead and report which id you changed.
+    check:
+      - ticket_field: {id: T-1004, field: priority, equals: high}
+      - answer_contains: "T-1004"
+    script:
+      - call: {tool: tickets_update, args: {id: T-1010, priority: high}}
+      - call: {tool: tickets_list, args: {}}
+      - call: {tool: tickets_update, args: {id: T-1004, priority: high}}
+      - answer: "T-1010 does not exist; updated T-1004 instead: {last}"
+
+  - id: t3_closed_ticket
+    tier: 3
+    notes: Updating a closed ticket returns 409; reopen first.
+    prompt: Mark ticket T-1006 as resolved and add the note "Reopened to correct status".
+    check:
+      - ticket_field: {id: T-1006, field: status, equals: resolved}
+      - ticket_note_contains: {id: T-1006, text: "Reopened to correct status"}
+    script:
+      - call: {tool: tickets_update, args: {id: T-1006, status: resolved}}
+      - call: {tool: tickets_update, args: {id: T-1006, status: open}}
+      - call: {tool: tickets_update, args: {id: T-1006, status: resolved}}
+      - call: {tool: tickets_add_note, args: {id: T-1006, text: "Reopened to correct status"}}
+      - answer: "T-1006 reopened, resolved and annotated."
+
+  - id: t3_invalid_status
+    tier: 3
+    notes: Schema enum rejects the first value; the agent must pick a valid one.
+    prompt: Change the status of ticket T-1002 to "done" (use the closest status the system accepts).
+    check:
+      - ticket_field: {id: T-1002, field: status, equals: resolved}
+    script:
+      - call: {tool: tickets_update, args: {id: T-1002, status: done}}
+      - call: {tool: tickets_update, args: {id: T-1002, status: resolved}}
+      - answer: "'done' is not a valid status; set T-1002 to resolved."
+
+  - id: t3_bad_argument
+    tier: 3
+    notes: Wrong argument name; validation error names the unknown key.
+    prompt: Read /config/app.json and report the timeout in seconds.
+    check:
+      - answer_contains: "30"
+    script:
+      - call: {tool: fs_read, args: {file: /config/app.json}}
+      - call: {tool: fs_read, args: {path: /config/app.json}}
+      - answer: "Config: {last}"
+
+  - id: t3_unknown_tool
+    tier: 3
+    notes: There is no delete tool; truncating via fs_write achieves the goal.
+    prompt: Make /notes/todo.txt empty (zero bytes).
+    check:
+      - file_equals: {path: /notes/todo.txt, content: ""}
+    script:
+      - call: {tool: fs_delete, args: {path: /notes/todo.txt}}
+      - call: {tool: fs_write, args: {path: /notes/todo.txt, content: ""}}
+      - answer: "No delete tool exists; overwrote /notes/todo.txt with empty content."

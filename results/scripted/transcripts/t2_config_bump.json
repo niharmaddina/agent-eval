@@ -1,0 +1,113 @@
+{
+ "failures": [],
+ "final_answer": "retries is now 6.",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "t2_config_bump",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/config/app.json"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 767,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "{\"env\": \"staging\", \"retries\": 3, \"timeout_s\": 30}\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "3 * 2"
+     },
+     "id": "call_2",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 789,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "6",
+   "is_error": false,
+   "step": 2,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "content": "{\"env\": \"staging\", \"retries\": 6, \"timeout_s\": 30}\n",
+      "path": "/config/app.json"
+     },
+     "id": "call_3",
+     "name": "fs_write"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 800,
+    "out": 27
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "wrote 50 characters to /config/app.json",
+   "is_error": false,
+   "step": 3,
+   "tool": "fs_write",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "retries is now 6.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 838,
+    "out": 4
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 3194,
+  "output_tokens": 47
+ },
+ "validation_errors": 0
+}

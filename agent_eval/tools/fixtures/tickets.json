@@ -1,0 +1,18 @@
+{
+  "tickets": [
+    {"id": "T-1001", "title": "Login page returns 500 for SSO users", "status": "open",
+     "priority": "high", "assignee": "dana", "customer": "Acme Corp"},
+    {"id": "T-1002", "title": "Export to CSV drops header row", "status": "in_progress",
+     "priority": "medium", "assignee": "lee", "customer": "Globex"},
+    {"id": "T-1003", "title": "Billing invoice shows wrong currency", "status": "open",
+     "priority": "urgent", "assignee": "dana", "customer": "Initech"},
+    {"id": "T-1004", "title": "Dark mode toggle not persisted", "status": "blocked",
+     "priority": "low", "assignee": "sam", "customer": "Umbrella"},
+    {"id": "T-1005", "title": "Webhook retries exceed documented limit", "status": "resolved",
+     "priority": "medium", "assignee": "lee", "customer": "Acme Corp"},
+    {"id": "T-1006", "title": "Password reset email delayed by 20 minutes", "status": "closed",
+     "priority": "high", "assignee": "sam", "customer": "Globex"},
+    {"id": "T-1007", "title": "Search ignores accented characters", "status": "open",
+     "priority": "low", "assignee": "unassigned", "customer": "Initech"}
+  ]
+}

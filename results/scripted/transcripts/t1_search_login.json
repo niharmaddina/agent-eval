@@ -1,0 +1,58 @@
+{
+ "failures": [],
+ "final_answer": "Found in: /docs/changelog.md",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_search_login",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "login bug"
+     },
+     "id": "call_1",
+     "name": "fs_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 750,
+    "out": 7
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "/docs/changelog.md",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_search",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Found in: /docs/changelog.md",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 763,
+    "out": 7
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1513,
+  "output_tokens": 14
+ },
+ "validation_errors": 0
+}

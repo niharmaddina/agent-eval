@@ -1,0 +1,60 @@
+{
+ "failures": [
+  "state: /notes/todo.txt content mismatch (got '- renew certificates\\n- rotate API keys\\n- archive old tickets\\n')"
+ ],
+ "final_answer": "I could not complete the task because a tool failed: unknown tool 'fs_delete'; available: fs_read, fs_write, fs_list, fs_search, calculator, tickets_list, tickets_get, tickets_update, tickets_add_note",
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_unknown_tool",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/notes/todo.txt"
+     },
+     "id": "call_1",
+     "name": "fs_delete"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 747,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "unknown tool 'fs_delete'; available: fs_read, fs_write, fs_list, fs_search, calculator, tickets_list, tickets_get, tickets_update, tickets_add_note",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_delete",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: unknown tool 'fs_delete'; available: fs_read, fs_write, fs_list, fs_search, calculator, tickets_list, tickets_get, tickets_update, tickets_add_note",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 794,
+    "out": 50
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1541,
+  "output_tokens": 59
+ },
+ "validation_errors": 1
+}

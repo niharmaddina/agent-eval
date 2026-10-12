@@ -1,0 +1,58 @@
+{
+ "failures": [],
+ "final_answer": "17.5% of 2480 is 434.",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_calc_percent",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "2480 * 0.175"
+     },
+     "id": "call_1",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 747,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "434",
+   "is_error": false,
+   "step": 1,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "17.5% of 2480 is 434.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 760,
+    "out": 5
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1507,
+  "output_tokens": 15
+ },
+ "validation_errors": 0
+}

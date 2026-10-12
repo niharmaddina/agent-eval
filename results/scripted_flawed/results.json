@@ -1,0 +1,494 @@
+{
+ "failures": {
+  "gave_up_after_error": 9,
+  "wrong_answer": 1,
+  "wrong_state": 5
+ },
+ "meta": {
+  "agent_eval_version": "0.1.0",
+  "generated_at": "2026-10-12T00:34:39Z",
+  "is_model_result": false,
+  "model": "replay-v1",
+  "provider": "scripted_flawed",
+  "suite": "basic",
+  "suite_version": 1
+ },
+ "overall": {
+  "estimated_cost_usd": 0.0,
+  "input_tokens": 53777,
+  "mean_steps": 2.38,
+  "output_tokens": 926,
+  "passed": 14,
+  "success_rate": 0.4828,
+  "tokens_estimated": true,
+  "tool_calls": 40,
+  "tool_error_rate": 0.15,
+  "tool_errors": 6,
+  "total": 29,
+  "validation_errors": 3
+ },
+ "stop_reasons": {
+  "answered": 29
+ },
+ "tasks": [
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_read_readme",
+   "tier": 1,
+   "tokens": 1558,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_list_data",
+   "tier": 1,
+   "tokens": 1516,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_write_hello",
+   "tier": 1,
+   "tokens": 1562,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_search_login",
+   "tier": 1,
+   "tokens": 1527,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_calc_percent",
+   "tier": 1,
+   "tokens": 1522,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_calc_power",
+   "tier": 1,
+   "tokens": 1526,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_ticket_get",
+   "tier": 1,
+   "tokens": 1594,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_ticket_list_open",
+   "tier": 1,
+   "tokens": 1628,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_ticket_note",
+   "tier": 1,
+   "tokens": 1554,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t1_ticket_priority",
+   "tier": 1,
+   "tokens": 1552,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_sum_q1",
+   "tier": 2,
+   "tokens": 2343,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: missing ['530'] in 'Q2 exceeded Q1 by region,amount\\nnorth,1500\\nsouth,900\\neast,610\\n.'"
+   ],
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_q1_vs_q2",
+   "tier": 2,
+   "tokens": 2373,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_state",
+   "failures": [
+    "state: /docs/summary.txt content mismatch (got None)"
+   ],
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_summary_file",
+   "tier": 2,
+   "tokens": 2444,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_copy_file",
+   "tier": 2,
+   "tokens": 2402,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_append_todo",
+   "tier": 2,
+   "tokens": 2408,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_state",
+   "failures": [
+    "state: ticket T-1003.assignee is 'dana', expected 'lee'"
+   ],
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_reassign_dana",
+   "tier": 2,
+   "tokens": 2408,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_state",
+   "failures": [
+    "state: ticket T-1002.status is 'in_progress', expected 'resolved'"
+   ],
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_resolve_with_note",
+   "tier": 2,
+   "tokens": 2423,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_state",
+   "failures": [
+    "state: /config/app.json does not contain '\"retries\": 6'"
+   ],
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_config_bump",
+   "tier": 2,
+   "tokens": 2376,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "t2_open_tickets_report",
+   "tier": 2,
+   "tokens": 2499,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_state",
+   "failures": [
+    "state: /reports/north_avg.txt content mismatch (got None)"
+   ],
+   "passed": false,
+   "steps": 4,
+   "stop_reason": "answered",
+   "task_id": "t2_north_average",
+   "tier": 2,
+   "tokens": 3269,
+   "tool_calls": 3,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['renew certificates', 'rotate API keys', 'archive old tickets'] in 'I could not complete the task because a tool failed: error: file not found: /notes/todo.md'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_missing_file",
+   "tier": 3,
+   "tokens": 1545,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['Project Atlas'] in 'I could not complete the task because a tool failed: error: directory not found: /documents'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_wrong_dir",
+   "tier": 3,
+   "tokens": 1549,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['1.2.0'] in 'I could not complete the task because a tool failed: error: /docs is a directory, not a file'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_dir_as_file",
+   "tier": 3,
+   "tokens": 1548,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['sales_q2.csv', '3010'] in 'I could not complete the task because a tool failed: error: file not found: /data/sales_2024.csv'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_search_fallback",
+   "tier": 3,
+   "tokens": 1604,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "state: ticket T-1004.priority is 'low', expected 'high'",
+    "answer: missing ['T-1004'] in 'I could not complete the task because a tool failed: error: 404: ticket T-1010 not found'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_ticket_404",
+   "tier": 3,
+   "tokens": 1616,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "state: ticket T-1006.status is 'closed', expected 'resolved'",
+    "state: ticket T-1006 has no note containing 'Reopened to correct status'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_closed_ticket",
+   "tier": 3,
+   "tokens": 1579,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "state: ticket T-1002.status is 'in_progress', expected 'resolved'"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_invalid_status",
+   "tier": 3,
+   "tokens": 1609,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 1
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['30'] in \"I could not complete the task because a tool failed: invalid arguments: $: missing required key 'path'; $: unknown key '\""
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_bad_argument",
+   "tier": 3,
+   "tokens": 1569,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 1
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "state: /notes/todo.txt content mismatch (got '- renew certificates\\n- rotate API keys\\n- archive old tickets\\n')"
+   ],
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "t3_unknown_tool",
+   "tier": 3,
+   "tokens": 1600,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 1
+  }
+ ],
+ "tiers": [
+  {
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 15274,
+   "label": "single tool",
+   "mean_steps": 2.0,
+   "output_tokens": 265,
+   "passed": 10,
+   "success_rate": 1.0,
+   "tier": 1,
+   "tokens_estimated": true,
+   "tool_calls": 10,
+   "tool_error_rate": 0.0,
+   "tool_errors": 0,
+   "total": 10,
+   "validation_errors": 0
+  },
+  {
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 24627,
+   "label": "multi-step",
+   "mean_steps": 3.1,
+   "output_tokens": 318,
+   "passed": 4,
+   "success_rate": 0.4,
+   "tier": 2,
+   "tokens_estimated": true,
+   "tool_calls": 21,
+   "tool_error_rate": 0.0,
+   "tool_errors": 0,
+   "total": 10,
+   "validation_errors": 0
+  },
+  {
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 13876,
+   "label": "error recovery",
+   "mean_steps": 2.0,
+   "output_tokens": 343,
+   "passed": 0,
+   "success_rate": 0.0,
+   "tier": 3,
+   "tokens_estimated": true,
+   "tool_calls": 9,
+   "tool_error_rate": 0.6667,
+   "tool_errors": 6,
+   "total": 9,
+   "validation_errors": 3
+  }
+ ]
+}

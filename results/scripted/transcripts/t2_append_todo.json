@@ -1,0 +1,86 @@
+{
+ "failures": [],
+ "final_answer": "Appended.",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "t2_append_todo",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/notes/todo.txt"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 757,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "- renew certificates\n- rotate API keys\n- archive old tickets\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "content": "- renew certificates\n- rotate API keys\n- archive old tickets\n- update runbook\n",
+      "path": "/notes/todo.txt"
+     },
+     "id": "call_2",
+     "name": "fs_write"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 782,
+    "out": 33
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "wrote 78 characters to /notes/todo.txt",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_write",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "Appended.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 826,
+    "out": 2
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2365,
+  "output_tokens": 43
+ },
+ "validation_errors": 0
+}

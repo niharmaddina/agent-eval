@@ -1,0 +1,60 @@
+{
+ "failures": [
+  "answer: missing ['30'] in \"I could not complete the task because a tool failed: invalid arguments: $: missing required key 'path'; $: unknown key '\""
+ ],
+ "final_answer": "I could not complete the task because a tool failed: invalid arguments: $: missing required key 'path'; $: unknown key 'file'",
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_bad_argument",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "file": "/config/app.json"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "invalid arguments: $: missing required key 'path'; $: unknown key 'file'",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: invalid arguments: $: missing required key 'path'; $: unknown key 'file'",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 779,
+    "out": 31
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1530,
+  "output_tokens": 39
+ },
+ "validation_errors": 1
+}

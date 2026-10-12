@@ -1,0 +1,88 @@
+{
+ "failures": [
+  "state: ticket T-1002.status is 'in_progress', expected 'resolved'"
+ ],
+ "final_answer": "T-1002 annotated and resolved.",
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "t2_resolve_with_note",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1002"
+     },
+     "id": "call_1",
+     "name": "tickets_get"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 757,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "{\n \"assignee\": \"lee\",\n \"customer\": \"Globex\",\n \"id\": \"T-1002\",\n \"notes\": [],\n \"priority\": \"medium\",\n \"status\": \"in_progress\",\n \"title\": \"Export to CSV drops header row\"\n}",
+   "is_error": false,
+   "step": 1,
+   "tool": "tickets_get",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1002",
+      "text": "Fix deployed in 1.2.0"
+     },
+     "id": "call_2",
+     "name": "tickets_add_note"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 807,
+    "out": 16
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "note #1 added to T-1002",
+   "is_error": false,
+   "step": 2,
+   "tool": "tickets_add_note",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "T-1002 annotated and resolved.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 830,
+    "out": 7
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2394,
+  "output_tokens": 29
+ },
+ "validation_errors": 0
+}

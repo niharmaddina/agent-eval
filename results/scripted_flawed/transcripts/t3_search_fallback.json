@@ -1,0 +1,60 @@
+{
+ "failures": [
+  "answer: missing ['sales_q2.csv', '3010'] in 'I could not complete the task because a tool failed: error: file not found: /data/sales_2024.csv'"
+ ],
+ "final_answer": "I could not complete the task because a tool failed: error: file not found: /data/sales_2024.csv",
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_search_fallback",
+ "tool_calls": 1,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_2024.csv"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 775,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: file not found: /data/sales_2024.csv",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: error: file not found: /data/sales_2024.csv",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 796,
+    "out": 24
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1571,
+  "output_tokens": 33
+ },
+ "validation_errors": 0
+}

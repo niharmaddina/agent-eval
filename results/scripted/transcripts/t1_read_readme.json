@@ -1,0 +1,58 @@
+{
+ "failures": [],
+ "final_answer": "The readme says: Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_read_readme",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs/readme.txt"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "The readme says: Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 778,
+    "out": 21
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1529,
+  "output_tokens": 29
+ },
+ "validation_errors": 0
+}

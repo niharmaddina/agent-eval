@@ -1,0 +1,139 @@
+{
+ "failures": [],
+ "final_answer": "There is no /documents; /docs/readme.txt says: Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 5,
+ "stop_reason": "answered",
+ "task_id": "t3_wrong_dir",
+ "tool_calls": 4,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/documents"
+     },
+     "id": "call_1",
+     "name": "fs_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 7
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: directory not found: /documents",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_list",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/"
+     },
+     "id": "call_2",
+     "name": "fs_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 769,
+    "out": 5
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "config/\ndata/\ndocs/\nnotes/",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_list",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs"
+     },
+     "id": "call_3",
+     "name": "fs_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 782,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "changelog.md\nreadme.txt",
+   "is_error": false,
+   "step": 3,
+   "tool": "fs_list",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs/readme.txt"
+     },
+     "id": "call_4",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 795,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+   "is_error": false,
+   "step": 4,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 5,
+   "text": "There is no /documents; /docs/readme.txt says: Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 822,
+    "out": 28
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 3919,
+  "output_tokens": 54
+ },
+ "validation_errors": 0
+}

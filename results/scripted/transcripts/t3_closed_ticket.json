@@ -1,0 +1,143 @@
+{
+ "failures": [],
+ "final_answer": "T-1006 reopened, resolved and annotated.",
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 5,
+ "stop_reason": "answered",
+ "task_id": "t3_closed_ticket",
+ "tool_calls": 4,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1006",
+      "status": "resolved"
+     },
+     "id": "call_1",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 756,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: 409: ticket T-1006 is closed; reopen it first",
+   "is_error": true,
+   "step": 1,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1006",
+      "status": "open"
+     },
+     "id": "call_2",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 784,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "updated: T-1006 [open/high] Password reset email delayed by 20 minutes (assignee: sam)",
+   "is_error": false,
+   "step": 2,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1006",
+      "status": "resolved"
+     },
+     "id": "call_3",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 819,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "updated: T-1006 [resolved/high] Password reset email delayed by 20 minutes (assignee: sam)",
+   "is_error": false,
+   "step": 3,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1006",
+      "text": "Reopened to correct status"
+     },
+     "id": "call_4",
+     "name": "tickets_add_note"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 856,
+    "out": 17
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "note #1 added to T-1006",
+   "is_error": false,
+   "step": 4,
+   "tool": "tickets_add_note",
+   "type": "tool_result"
+  },
+  {
+   "provider_stop_reason": "end_turn",
+   "step": 5,
+   "text": "T-1006 reopened, resolved and annotated.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 880,
+    "out": 10
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 4095,
+  "output_tokens": 65
+ },
+ "validation_errors": 0
+}
