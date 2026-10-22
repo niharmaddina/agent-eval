@@ -54,6 +54,19 @@ def failure_category(rec: RunRecord) -> str | None:
     return "checker_error"
 
 
+def cost_per_success(cost: float | None, passed: int) -> float | None:
+    """USD spent per passed task; None when cost is unknown or nothing passed."""
+    if cost is None or passed == 0:
+        return None
+    return round(cost / passed, 6)
+
+
+def mean_latency_ms(records: list[RunRecord]) -> float | None:
+    """Mean per-task wall time over tasks whose provider reported latency; None otherwise."""
+    reported = [r.latency_ms for r in records if r.latency_ms is not None]
+    return round(sum(reported) / len(reported), 1) if reported else None
+
+
 def _aggregate(records: list[RunRecord], model: str) -> dict[str, Any]:
     n = len(records)
     usage = Usage()
@@ -62,6 +75,7 @@ def _aggregate(records: list[RunRecord], model: str) -> dict[str, Any]:
     passed = sum(r.passed for r in records)
     calls = sum(r.tool_calls for r in records)
     errors = sum(r.tool_errors for r in records)
+    cost = estimate_cost(model, usage)
     return {
         "total": n,
         "passed": passed,
@@ -74,7 +88,9 @@ def _aggregate(records: list[RunRecord], model: str) -> dict[str, Any]:
         "input_tokens": usage.input_tokens,
         "output_tokens": usage.output_tokens,
         "tokens_estimated": usage.estimated,
-        "estimated_cost_usd": estimate_cost(model, usage),
+        "estimated_cost_usd": cost,
+        "cost_per_success_usd": cost_per_success(cost, passed),
+        "mean_latency_ms": mean_latency_ms(records),
     }
 
 
@@ -100,6 +116,7 @@ def compute_metrics(records: list[RunRecord], suite: Suite, model: str) -> dict[
             "failure_category": failure_category(r),
             "failures": r.failures,
             "tokens": r.usage.total,
+            "latency_ms": r.latency_ms,
         }
         for r in records
     ]

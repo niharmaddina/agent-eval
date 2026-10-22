@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import TYPE_CHECKING, Any
 
 from agent_eval.providers.base import ProviderError, ProviderUnavailable, estimate_message_tokens
@@ -77,12 +78,14 @@ class OpenAICompatProvider:
             }
             for t in tools
         ]
+        started = time.perf_counter()
         try:
             resp = self._client.chat.completions.create(
                 model=self.model, messages=to_openai(messages), tools=api_tools
             )
         except self._sdk.APIError as exc:
             raise ProviderError(f"openai_compat: {exc}") from exc
+        latency_ms = round((time.perf_counter() - started) * 1000, 1)
 
         choice = resp.choices[0]
         calls: list[ToolCall] = []
@@ -105,4 +108,4 @@ class OpenAICompatProvider:
         stop: str = choice.finish_reason or "stop"
         if stop == "length":
             stop = "max_tokens"
-        return ProviderResponse(msg, usage, stop_reason=stop)
+        return ProviderResponse(msg, usage, stop_reason=stop, latency_ms=latency_ms)

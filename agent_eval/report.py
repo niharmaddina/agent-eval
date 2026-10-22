@@ -20,6 +20,17 @@ def _cost(c: float | None) -> str:
     return "n/a (model not in price table)" if c is None else f"${c:.4f}"
 
 
+def _per_success(o: dict[str, Any]) -> str:
+    c = o.get("cost_per_success_usd")
+    if c is None:
+        return "n/a" if o["passed"] == 0 else "n/a (model not in price table)"
+    return f"${c:.4f}"
+
+
+def _latency(ms: float | None) -> str:
+    return "not reported (replay provider or no calls)" if ms is None else f"{ms:.0f} ms/task"
+
+
 def _row(cells: list[Any]) -> str:
     return "| " + " | ".join(str(c) for c in cells) + " |"
 
@@ -33,7 +44,8 @@ def render_markdown(meta: dict[str, Any], metrics: dict[str, Any]) -> str:
         f"- Suite: `{meta['suite']}` v{meta['suite_version']} ({o['total']} tasks)",
         f"- Generated: {meta['generated_at']}",
         f"- Token counts: {token_note}",
-        f"- Estimated cost: {_cost(o['estimated_cost_usd'])}",
+        f"- Estimated cost: {_cost(o['estimated_cost_usd'])} ({_per_success(o)} per success)",
+        f"- Mean latency: {_latency(o.get('mean_latency_ms'))}",
     ]
     if meta["provider"].startswith("scripted"):
         lines.append(f"- Baseline note: {REPLAY_NOTE}")

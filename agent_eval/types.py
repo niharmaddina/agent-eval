@@ -59,6 +59,7 @@ class ProviderResponse:
     message: Message
     usage: Usage
     stop_reason: str = "end_turn"
+    latency_ms: float | None = None  # wall time of the API call; None for replay providers
 
 
 @dataclass
@@ -87,8 +88,37 @@ class RunRecord:
     validation_errors: int
     usage: Usage
     transcript: list[dict[str, Any]]
+    budget: Budget = field(default_factory=Budget)
+    latency_ms: float | None = None  # sum of provider-reported call latencies, if any
     passed: bool = False
     failures: list[str] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, d: dict[str, Any]) -> RunRecord:
+        """Rebuild a record from a transcript JSON file (older files may lack newer keys)."""
+        u = d.get("usage", {})
+        b = d.get("budget", {})
+        return cls(
+            task_id=str(d["task_id"]),
+            provider=str(d.get("provider", "?")),
+            model=str(d.get("model", "?")),
+            stop_reason=d.get("stop_reason", "answered"),
+            final_answer=str(d.get("final_answer", "")),
+            steps=int(d.get("steps", 0)),
+            tool_calls=int(d.get("tool_calls", 0)),
+            tool_errors=int(d.get("tool_errors", 0)),
+            validation_errors=int(d.get("validation_errors", 0)),
+            usage=Usage(
+                int(u.get("input_tokens", 0)),
+                int(u.get("output_tokens", 0)),
+                bool(u.get("estimated", False)),
+            ),
+            transcript=list(d.get("transcript", [])),
+            budget=Budget(int(b.get("max_steps", 0)), int(b.get("max_tokens", 0))),
+            latency_ms=d.get("latency_ms"),
+            passed=bool(d.get("passed", False)),
+            failures=list(d.get("failures", [])),
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -106,6 +136,8 @@ class RunRecord:
                 "output_tokens": self.usage.output_tokens,
                 "estimated": self.usage.estimated,
             },
+            "budget": {"max_steps": self.budget.max_steps, "max_tokens": self.budget.max_tokens},
+            "latency_ms": self.latency_ms,
             "passed": self.passed,
             "failures": self.failures,
             "transcript": self.transcript,

@@ -7,6 +7,7 @@ should attribute every outcome to the model under test.
 from __future__ import annotations
 
 import os
+import time
 from typing import TYPE_CHECKING, Any
 
 from agent_eval.providers.base import ProviderError, ProviderUnavailable
@@ -90,6 +91,7 @@ class AnthropicProvider:
             {"name": t["name"], "description": t["description"], "input_schema": t["input_schema"]}
             for t in tools
         ]
+        started = time.perf_counter()
         try:
             resp = self._client.messages.create(
                 model=self.model,
@@ -104,6 +106,7 @@ class AnthropicProvider:
             raise ProviderError(f"anthropic connection error: {exc}") from exc
         except self._sdk.APIError as exc:  # e.g. a response that fails SDK validation
             raise ProviderError(f"anthropic API error: {exc}") from exc
+        latency_ms = round((time.perf_counter() - started) * 1000, 1)
 
         text_parts: list[str] = []
         calls: list[ToolCall] = []
@@ -114,4 +117,4 @@ class AnthropicProvider:
                 calls.append(ToolCall(id=block.id, name=block.name, arguments=dict(block.input)))
         msg = Message("assistant", "".join(text_parts), tool_calls=calls, raw=list(resp.content))
         usage = Usage(resp.usage.input_tokens, resp.usage.output_tokens)
-        return ProviderResponse(msg, usage, stop_reason=resp.stop_reason or "end_turn")
+        return ProviderResponse(msg, usage, resp.stop_reason or "end_turn", latency_ms=latency_ms)

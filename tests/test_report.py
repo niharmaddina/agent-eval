@@ -64,3 +64,42 @@ def test_cli_run_and_checks(tmp_path, capsys, monkeypatch):
     assert "1/1 passed" in capsys.readouterr().out and (out / "report.md").exists()
     assert main(["run", "--provider", "anthropic", "--out", str(out)]) == 2
     assert "ANTHROPIC_API_KEY" in capsys.readouterr().err
+
+
+def test_cost_per_success_and_latency_fields():
+    good = ScriptedProvider()
+    records = [run_task(good, t) for t in SUITE.tasks if t.id in IDS]
+    m = compute_metrics(records, SUITE, good.model)
+    assert m["overall"]["cost_per_success_usd"] == 0.0  # replay providers cost nothing
+    assert m["overall"]["mean_latency_ms"] is None and m["tasks"][0]["latency_ms"] is None
+    flawed = ScriptedProvider(flawed=True)
+    none_pass = [run_task(flawed, t) for t in SUITE.tasks if t.id == "t3_missing_file"]
+    m = compute_metrics(none_pass, SUITE, flawed.model)
+    assert m["overall"]["passed"] == 0 and m["overall"]["cost_per_success_usd"] is None
+    records[0].latency_ms, records[1].latency_ms = 1000.0, 3000.0
+    m = compute_metrics(records, SUITE, "claude-opus-5")
+    assert m["overall"]["mean_latency_ms"] == 2000.0
+    assert m["overall"]["cost_per_success_usd"] == round(m["overall"]["estimated_cost_usd"] / 3, 6)
+    md = render_markdown(
+        {
+            "provider": "x",
+            "model": "claude-opus-5",
+            "suite": "s",
+            "suite_version": 1,
+            "generated_at": "t",
+        },
+        m,
+    )
+    assert "per success)" in md and "- Mean latency: 2000 ms/task" in md
+    md = render_markdown(
+        {
+            "provider": "scripted",
+            "model": "replay-v1",
+            "suite": "s",
+            "suite_version": 1,
+            "generated_at": "t",
+        },
+        compute_metrics(records, SUITE, "replay-v1"),
+    )
+    assert "- Estimated cost: $0.0000 ($0.0000 per success)" in md
+    assert "- Mean latency: 2000 ms/task" in md

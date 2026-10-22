@@ -75,6 +75,7 @@ def run_loop(
     final_answer = ""
     steps = 0
     n_calls = 0
+    latency: float | None = None
 
     for step in range(1, budget.max_steps + 1):
         steps = step
@@ -90,6 +91,8 @@ def run_loop(
             stop = "provider_error"
             break
         usage.add(response.usage)
+        if response.latency_ms is not None:
+            latency = (latency or 0.0) + response.latency_ms
         msg = response.message
         messages.append(msg)
         transcript.append(
@@ -102,6 +105,7 @@ def run_loop(
                 ],
                 "provider_stop_reason": response.stop_reason,
                 "usage": {"in": response.usage.input_tokens, "out": response.usage.output_tokens},
+                "latency_ms": response.latency_ms,  # placeholder (null) for replay providers
             }
         )
         if response.stop_reason == "refusal":
@@ -143,4 +147,6 @@ def run_loop(
         validation_errors=executor.validation_errors,
         usage=usage,
         transcript=transcript,
+        budget=budget,
+        latency_ms=None if latency is None else round(latency, 3),
     )

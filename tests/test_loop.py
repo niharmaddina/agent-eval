@@ -127,3 +127,27 @@ def test_registry_subset_limits_available_tools():
     p = ListProvider([call("fs_read", path="/docs/readme.txt"), answer("x")])
     rec = run_loop(p, reg, Sandbox.fresh(), "q", Budget(), task_id="t")
     assert rec.validation_errors == 1 and "unknown tool 'fs_read'" in rec.transcript[1]["content"]
+
+
+class _TimedProvider(ListProvider):
+    """Reports a wall-time latency on every call, as the live providers do."""
+
+    def complete(self, messages, tools):
+        resp = super().complete(messages, tools)
+        resp.latency_ms = 250.25
+        return resp
+
+
+def test_latency_is_a_placeholder_for_replay_providers_and_summed_for_live_ones():
+    rec, _ = go(ListProvider([call("fs_list", path="/"), answer("ok")]))
+    assert rec.latency_ms is None
+    assert [e["latency_ms"] for e in rec.transcript if e["type"] == "assistant"] == [None, None]
+    rec, _ = go(_TimedProvider([call("fs_list", path="/"), answer("ok")]))
+    assert rec.latency_ms == 500.5
+    assert rec.transcript[0]["latency_ms"] == 250.25
+
+
+def test_record_carries_its_budget_for_replay():
+    rec, _ = go(ListProvider([answer("ok")]), Budget(max_steps=4, max_tokens=999))
+    d = rec.to_dict()
+    assert d["budget"] == {"max_steps": 4, "max_tokens": 999} and d["latency_ms"] is None
