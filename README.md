@@ -5,12 +5,14 @@ a tiered task suite through a bounded tool loop against a deterministic sandbox 
 system, safe calculator, fake ticketing API, fake web with search and fetch), checks the final
 state and answer programmatically, and writes a markdown report, a JSON summary and a per-task
 transcript. `agent-eval compare` diffs two result directories task by task; `agent-eval replay`
-prints one transcript as readable text. Everything runs with no network and no API key, provider
-and tool failures are recorded rather than raised, and the committed baselines regenerate
-byte-for-byte in CI. Real model providers (Anthropic, OpenAI-compatible) plug in behind the same
-interface.
+prints one transcript as readable text.
 
-Status: v0.2.0, Python 3.11, `mypy --strict` and `ruff` clean, 125 offline tests, CI on every
+Built to be trusted before it is pointed at a model: everything runs with no network and no API
+key, provider and tool failures are recorded rather than raised, every checker is a program (no
+LLM judge), and the committed baselines regenerate byte-for-byte in CI. Real model providers
+(Anthropic, OpenAI-compatible) plug in behind the same interface.
+
+Status: v0.2.0, Python 3.11, `mypy --strict` and `ruff` clean, 126 offline tests, CI on every
 push. Two suites: `basic` (29 tasks, three tiers, file system / calculator / tickets) and
 `research` (17 tasks, four tiers, web search and fetch).
 
@@ -279,7 +281,7 @@ and `compare.json`. Different suites are refused. The committed
 | --- | --- | --- | --- | --- | --- |
 | `r1_fetch_owner` | 1 | 2 -> 1 (-1) | 710 -> 265 (-445) | answered | wrong_answer: answer: missing ['ops team'] in 'Atlas is maintained by the platform team.' |
 | `r2_fact_two_pages` | 2 | 3 -> 2 (-1) | 1200 -> 691 (-509) | answered | wrong_answer: answer: missing ['2026-03-14', 'https://atlas.example/docs/changelog'] in 'Release 1.2.0 r |
-| `r2_link_chain` | 2 | 4 -> 3 (-1) | 1406 -> 902 (-504) | answered | wrong_answer: answer: does not match /retries[^0-9]{0,40}\b3\b/ in 'Atlas retries a deployment 5 times b |
+| `r2_link_chain` | 2 | 4 -> 3 (-1) | 1406 -> 902 (-504) | answered | wrong_answer: answer: does not match /retr(?:y\|ies)\D{0,40}\b3\b\|\b3\b\D{0,40}retr(?:y\|ies)/ in 'Atlas r |
 | ... | | | | | |
 ```
 
@@ -308,7 +310,7 @@ verdict: FAIL (gave_up_after_error)
   - answer: missing ['$40'] in 'The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price.'
 ```
 
-A validation failure shows up on the call itself, from `t3_bad_argument`:
+A validation failure shows up on the call itself, from the `scripted` run of `t3_bad_argument`:
 
 ```
 step 1  assistant (tool_use; 751 in / 8 out)

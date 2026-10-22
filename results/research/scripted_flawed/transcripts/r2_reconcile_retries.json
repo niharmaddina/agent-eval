@@ -4,7 +4,8 @@
   "max_tokens": 20000
  },
  "failures": [
-  "answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
+  "answer: missing ['https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'",
+  "answer: does not match /\\b8\\b/ in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
  ],
  "final_answer": "Webhook deliveries are retried 5 times (https://wiki.example/atlas).",
  "latency_ms": null,

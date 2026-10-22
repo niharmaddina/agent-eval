@@ -20,16 +20,16 @@
 | --- | --- | --- | --- | --- | --- |
 | `r1_fetch_owner` | 1 | 2 -> 1 (-1) | 710 -> 265 (-445) | answered | wrong_answer: answer: missing ['ops team'] in 'Atlas is maintained by the platform team.' |
 | `r2_fact_two_pages` | 2 | 3 -> 2 (-1) | 1200 -> 691 (-509) | answered | wrong_answer: answer: missing ['2026-03-14', 'https://atlas.example/docs/changelog'] in 'Release 1.2.0 r |
-| `r2_link_chain` | 2 | 4 -> 3 (-1) | 1406 -> 902 (-504) | answered | wrong_answer: answer: does not match /retries[^0-9]{0,40}\b3\b/ in 'Atlas retries a deployment 5 times b |
+| `r2_link_chain` | 2 | 4 -> 3 (-1) | 1406 -> 902 (-504) | answered | wrong_answer: answer: does not match /retr(?:y\|ies)\D{0,40}\b3\b\|\b3\b\D{0,40}retr(?:y\|ies)/ in 'Atlas r |
 | `r2_reconcile_price` | 2 | 3 -> 2 (-1) | 1286 -> 727 (-559) | answered | wrong_answer: answer: missing ['$40', 'https://atlas.example/pricing'] in 'The Team plan costs $35 per s |
-| `r2_reconcile_retries` | 2 | 4 -> 2 (-2) | 2055 -> 721 (-1334) | answered | wrong_answer: answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retr |
+| `r2_reconcile_retries` | 2 | 4 -> 2 (-2) | 2055 -> 721 (-1334) | answered | wrong_answer: answer: missing ['https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 |
 | `r3_404_search_again` | 3 | 4 -> 2 (-2) | 1758 -> 633 (-1125) | answered | gave_up_after_error: answer: missing ['$40'] in 'The pricing page https://atlas.example/pricing/2025 no longer  |
 | `r3_timeout_mirror` | 3 | 4 -> 3 (-1) | 1787 -> 1220 (-567) | answered | gave_up_after_error: answer: missing ['600'] in 'The mirror at https://mirror.example/atlas/docs/limits timed o |
 | `r3_bad_url_scheme` | 3 | 3 -> 2 (-1) | 1046 -> 582 (-464) | answered | gave_up_after_error: answer: missing ['pip install atlas-cli'] in 'The URL atlas.example/docs/install could not |
 | `r3_dead_link_report` | 3 | 3 -> 3 (0) | 1185 -> 1157 (-28) | answered | gave_up_after_error: answer: missing ['retired', '$40'] in 'I could not complete the task: the 2025 price list  |
 | `r4_incident_chain` | 4 | 4 -> 5 (+1) | 1487 -> 2039 (+552) | step_budget | step_budget: answer: missing ['TLS certificate', '42 minutes'] in '' |
-| `r4_price_gap` | 4 | 4 -> 5 (+1) | 1722 -> 2493 (+771) | step_budget | step_budget: answer: does not match /\$5\b/\b5 dollars/ in '' |
-| `r4_two_sources_retries` | 4 | 4 -> 5 (+1) | 2024 -> 2547 (+523) | step_budget | step_budget: answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limit |
+| `r4_price_gap` | 4 | 4 -> 5 (+1) | 1722 -> 2493 (+771) | step_budget | step_budget: answer: does not match /\$5\b\|\b5 dollars/ in '' |
+| `r4_two_sources_retries` | 4 | 4 -> 5 (+1) | 2024 -> 2547 (+523) | step_budget | step_budget: answer: missing ['https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in '' |
 
 ## Newly passing (0)
 

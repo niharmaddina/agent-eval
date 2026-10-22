@@ -79,10 +79,15 @@ def test_fetch_renders_title_body_and_links(sb):
     assert out.startswith("# Atlas - internal deployment tool\nhttps://atlas.example/\n\n")
     assert "owned and maintained by the ops team" in out
     assert "Links:\n- https://atlas.example/docs\n" in out
-    # a trailing slash is not a different page
+    # a trailing slash is not a different page, in either direction
     assert run(sb, "web_fetch", url="https://atlas.example/docs/") == run(
         sb, "web_fetch", url="https://atlas.example/docs"
     )
+    assert run(sb, "web_fetch", url="https://atlas.example") == run(
+        sb, "web_fetch", url="https://atlas.example/"
+    )
+    with pytest.raises(ToolError, match="404 Not Found"):
+        sb.web.fetch("https://atlas.example/docs//")  # only one slash is forgiven
 
 
 def test_fetch_errors_are_deterministic_and_logged(sb):

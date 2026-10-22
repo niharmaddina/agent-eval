@@ -42,6 +42,8 @@ def test_markdown_and_json_outputs(tmp_path):
     assert sorted(p.stem for p in (tmp_path / "out" / "transcripts").iterdir()) == sorted(IDS)
     rendered = render_markdown(data["meta"], data)
     assert rendered == md
+    data["tasks"][0]["failures"] = ["answer: does not match /a|b/ in 'x'"]
+    assert "does not match /a\\|b/ in 'x' |" in render_markdown(data["meta"], data)
 
 
 def test_source_date_epoch_makes_two_runs_byte_identical(tmp_path, monkeypatch):

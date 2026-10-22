@@ -4,7 +4,9 @@
   "max_tokens": 20000
  },
  "failures": [
-  "answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''"
+  "answer: missing ['https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''",
+  "answer: does not match /\\b5\\b/ in ''",
+  "answer: does not match /\\b8\\b/ in ''"
  ],
  "final_answer": "",
  "latency_ms": null,

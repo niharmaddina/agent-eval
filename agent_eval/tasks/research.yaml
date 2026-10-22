@@ -98,7 +98,8 @@ tasks:
       Starting from https://atlas.example/ and following links only (no searching), find the
       default number of deploy retries.
     check:
-      - answer_matches: "retries[^0-9]{0,40}\\b3\\b"
+      # the figure may come before or after the word: "3 deploy retries", "retry count is 3"
+      - answer_matches: "retr(?:y|ies)\\D{0,40}\\b3\\b|\\b3\\b\\D{0,40}retr(?:y|ies)"
     script:
       - call: {tool: web_fetch, args: {url: https://atlas.example/}}
       - call: {tool: web_fetch, args: {url: https://atlas.example/docs}}
@@ -140,7 +141,10 @@ tasks:
       from the official Atlas limits page. Report both numbers, say which is current, and cite
       both URLs.
     check:
-      - answer_contains: ["5", "8", "https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+      - answer_contains: ["https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+      # whole numbers only: a bare "5" would be satisfied by the wiki's 2025 edit date
+      - answer_matches: "\\b5\\b"
+      - answer_matches: "\\b8\\b"
     script:
       - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
       - call: {tool: web_search, args: {query: "Atlas rate limits quotas"}}
@@ -333,7 +337,10 @@ tasks:
       Within 5 steps: what is the current Atlas webhook retry limit according to the official
       limits page, and what does the community wiki https://wiki.example/atlas say? Cite both URLs.
     check:
-      - answer_contains: ["5", "8", "https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+      - answer_contains: ["https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+      # whole numbers only: a bare "5" would be satisfied by the wiki's 2025 edit date
+      - answer_matches: "\\b5\\b"
+      - answer_matches: "\\b8\\b"
     script:
       - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
       - call: {tool: web_search, args: {query: "Atlas rate limits quotas"}}

@@ -36,9 +36,9 @@ Tokens: 17988 in / 1071 out.
 | `r1_search_root_cause` | 1 | pass | 2 | 1 | 0 | answered |  |
 | `r1_search_windows` | 1 | pass | 2 | 1 | 0 | answered |  |
 | `r2_fact_two_pages` | 2 | FAIL | 2 | 1 | 0 | answered | wrong_answer: answer: missing ['2026-03-14', 'https://atlas.example/docs/changelog'] in 'Release 1.2.0 r |
-| `r2_link_chain` | 2 | FAIL | 3 | 2 | 0 | answered | wrong_answer: answer: does not match /retries[^0-9]{0,40}\b3\b/ in 'Atlas retries a deployment 5 times b |
+| `r2_link_chain` | 2 | FAIL | 3 | 2 | 0 | answered | wrong_answer: answer: does not match /retr(?:y\|ies)\D{0,40}\b3\b\|\b3\b\D{0,40}retr(?:y\|ies)/ in 'Atlas r |
 | `r2_reconcile_price` | 2 | FAIL | 2 | 1 | 0 | answered | wrong_answer: answer: missing ['$40', 'https://atlas.example/pricing'] in 'The Team plan costs $35 per s |
-| `r2_reconcile_retries` | 2 | FAIL | 2 | 1 | 0 | answered | wrong_answer: answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retr |
+| `r2_reconcile_retries` | 2 | FAIL | 2 | 1 | 0 | answered | wrong_answer: answer: missing ['https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 |
 | `r2_search_then_fetch` | 2 | pass | 3 | 2 | 0 | answered |  |
 | `r2_seats_cost` | 2 | pass | 3 | 2 | 0 | answered |  |
 | `r3_404_search_again` | 3 | FAIL | 2 | 1 | 1 | answered | gave_up_after_error: answer: missing ['$40'] in 'The pricing page https://atlas.example/pricing/2025 no longer  |
@@ -46,5 +46,5 @@ Tokens: 17988 in / 1071 out.
 | `r3_bad_url_scheme` | 3 | FAIL | 2 | 1 | 1 | answered | gave_up_after_error: answer: missing ['pip install atlas-cli'] in 'The URL atlas.example/docs/install could not |
 | `r3_dead_link_report` | 3 | FAIL | 3 | 2 | 1 | answered | gave_up_after_error: answer: missing ['retired', '$40'] in 'I could not complete the task: the 2025 price list  |
 | `r4_incident_chain` | 4 | FAIL | 5 | 5 | 0 | step_budget | step_budget: answer: missing ['TLS certificate', '42 minutes'] in '' |
-| `r4_price_gap` | 4 | FAIL | 5 | 5 | 0 | step_budget | step_budget: answer: does not match /\$5\b/\b5 dollars/ in '' |
-| `r4_two_sources_retries` | 4 | FAIL | 5 | 5 | 1 | step_budget | step_budget: answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limit |
+| `r4_price_gap` | 4 | FAIL | 5 | 5 | 0 | step_budget | step_budget: answer: does not match /\$5\b\|\b5 dollars/ in '' |
+| `r4_two_sources_retries` | 4 | FAIL | 5 | 5 | 1 | step_budget | step_budget: answer: missing ['https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in '' |

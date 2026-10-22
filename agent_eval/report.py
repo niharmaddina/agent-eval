@@ -124,7 +124,7 @@ def render_markdown(meta: dict[str, Any], metrics: dict[str, Any]) -> str:
     for t in metrics["tasks"]:
         detail = t["failure_category"] or ""
         if t["failures"]:
-            detail += ": " + t["failures"][0][:90].replace("|", "/").replace("\n", " ")
+            detail += ": " + t["failures"][0][:90].replace("|", "\\|").replace("\n", " ")
         lines.append(
             _row(
                 [

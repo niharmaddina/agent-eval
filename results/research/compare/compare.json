@@ -129,7 +129,7 @@
    "tokens_delta": -509
   },
   {
-   "detail_b": "answer: does not match /retries[^0-9]{0,40}\\b3\\b/ in 'Atlas retries a deployment 5 times by default.'",
+   "detail_b": "answer: does not match /retr(?:y|ies)\\D{0,40}\\b3\\b|\\b3\\b\\D{0,40}retr(?:y|ies)/ in 'Atlas retries a deployment 5 times by default.'",
    "failure_a": null,
    "failure_b": "wrong_answer",
    "passed_a": true,
@@ -165,7 +165,7 @@
    "tokens_delta": -559
   },
   {
-   "detail_b": "answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'",
+   "detail_b": "answer: missing ['https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'",
    "failure_a": null,
    "failure_b": "wrong_answer",
    "passed_a": true,
@@ -327,7 +327,7 @@
    "tokens_delta": 771
   },
   {
-   "detail_b": "answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''",
+   "detail_b": "answer: missing ['https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''",
    "failure_a": null,
    "failure_b": "step_budget",
    "passed_a": true,

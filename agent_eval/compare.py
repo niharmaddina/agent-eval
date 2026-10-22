@@ -201,7 +201,7 @@ def render_markdown(cmp: dict[str, Any], all_tasks: bool = False) -> str:
         for r in rows:
             detail = r["failure_b"] or ""
             if r["detail_b"]:
-                detail += ": " + r["detail_b"][:90].replace("|", "/").replace("\n", " ")
+                detail += ": " + r["detail_b"][:90].replace("|", "\\|").replace("\n", " ")
             lines.append(
                 _row(
                     [

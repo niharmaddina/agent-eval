@@ -93,6 +93,35 @@ def test_conflict_tasks_require_both_sources_to_be_cited():
     assert len(failures) == 1 and "https://atlas.example/pricing" in failures[0]
     both = f"{urls[0]} says $35; {urls[1]} says $40 and is current."
     assert run_checks(task.checks, Sandbox.fresh(), both) == []
+    # the retry-limit pair needs both figures as whole numbers: the wiki's 2025 edit date must
+    # not stand in for the "5", so an answer claiming the two sources agree fails
+    agree = (
+        "Both say 8 attempts (https://atlas.example/docs/limits; https://wiki.example/atlas, "
+        "last edited 2025-11-02)."
+    )
+    both = (
+        "Wiki (https://wiki.example/atlas): 5 attempts; official page "
+        "(https://atlas.example/docs/limits): 8 attempts, raised in 1.2.0."
+    )
+    for tid in ("r2_reconcile_retries", "r4_two_sources_retries"):
+        failures = run_checks(BY_ID[tid].checks, Sandbox.fresh(), agree)
+        assert len(failures) == 1 and "/\\b5\\b/" in failures[0], (tid, failures)
+        assert run_checks(BY_ID[tid].checks, Sandbox.fresh(), both) == [], tid
+
+
+def test_link_chain_accepts_the_figure_on_either_side_of_the_word():
+    checks = BY_ID["r2_link_chain"].checks
+    for ok in (
+        "Default deploy retries: 3.",
+        "Atlas defaults to 3 deploy retries.",
+        "retry count: 3",
+    ):
+        assert run_checks(checks, Sandbox.fresh(), ok) == [], ok
+    for bad in (
+        "Atlas retries a deployment 5 times by default.",
+        "Python 3.11; retries default 30.",
+    ):
+        assert run_checks(checks, Sandbox.fresh(), bad), bad
 
 
 def test_cli_check_and_list_show_suite_tiers(capsys):

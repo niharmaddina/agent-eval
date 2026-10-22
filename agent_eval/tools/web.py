@@ -90,8 +90,8 @@ class WebStore:
         if not url.startswith("https://"):
             raise ToolError(f"invalid url {url!r}: must be absolute and start with https://")
         page = self.pages.get(url)
-        if page is None and url.endswith("/"):  # a trailing slash is not a different page
-            page = self.pages.get(url[:-1])
+        if page is None:  # a trailing slash is not a different page, in either direction
+            page = self.pages.get(url[:-1] if url.endswith("/") else url + "/")
         if page is None:
             raise ToolError(f"404 Not Found: {url}")
         if page.error == "404":

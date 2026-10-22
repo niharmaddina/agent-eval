@@ -95,6 +95,9 @@ def test_markdown_and_json_outputs(dirs, tmp_path):
     assert json.loads(json_path.read_text())["summary"] == cmp["summary"]
     full = md_path.read_text()
     assert "## All tasks" in full and "| `r1_fetch_uptime` | 1 | pass_both |" in full
+    # a pipe inside a failure detail (a regex alternation) is escaped, not rewritten, in the cell
+    cmp["tasks"][0]["detail_b"] = "answer: does not match /a|b/ in 'x'"
+    assert "does not match /a\\|b/ in 'x' |" in render_markdown(cmp)
 
 
 def test_cli_compare(dirs, tmp_path, capsys):

@@ -111,7 +111,7 @@
   {
    "failure_category": "wrong_answer",
    "failures": [
-    "answer: does not match /retries[^0-9]{0,40}\\b3\\b/ in 'Atlas retries a deployment 5 times by default.'"
+    "answer: does not match /retr(?:y|ies)\\D{0,40}\\b3\\b|\\b3\\b\\D{0,40}retr(?:y|ies)/ in 'Atlas retries a deployment 5 times by default.'"
    ],
    "latency_ms": null,
    "passed": false,
@@ -143,7 +143,8 @@
   {
    "failure_category": "wrong_answer",
    "failures": [
-    "answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
+    "answer: missing ['https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'",
+    "answer: does not match /\\b8\\b/ in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
    ],
    "latency_ms": null,
    "passed": false,
@@ -283,7 +284,9 @@
   {
    "failure_category": "step_budget",
    "failures": [
-    "answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''"
+    "answer: missing ['https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''",
+    "answer: does not match /\\b5\\b/ in ''",
+    "answer: does not match /\\b8\\b/ in ''"
    ],
    "latency_ms": null,
    "passed": false,
