@@ -1,13 +1,15 @@
-"""Command-line entry point: ``agent-eval run|list-tasks|check-suite``."""
+"""Command-line entry point: ``agent-eval run|list-tasks|check-suite|compare``."""
 
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
 import yaml
 
+from agent_eval.compare import compare, load_results, render_markdown, write_compare
 from agent_eval.providers import PROVIDER_NAMES, ProviderUnavailable, get_provider
 from agent_eval.runner import run_suite
 from agent_eval.tasks import DEFAULT_SUITE, Suite, load_suite
@@ -35,6 +37,12 @@ def _build_parser() -> argparse.ArgumentParser:
     chk = sub.add_parser("check-suite", help="validate a suite file and exit")
     chk.add_argument("--suite", default=str(DEFAULT_SUITE))
 
+    cmp = sub.add_parser("compare", help="diff two result directories of the same suite")
+    cmp.add_argument("a", help="baseline results directory (or results.json)")
+    cmp.add_argument("b", help="candidate results directory (or results.json)")
+    cmp.add_argument("--out", default=None, help="write compare.md and compare.json here")
+    cmp.add_argument("--json", action="store_true", help="print JSON instead of markdown")
+
     return p
 
 
@@ -46,8 +54,34 @@ def _load(path: str) -> Suite | None:
         return None
 
 
+def _cmd_compare(args: argparse.Namespace) -> int:
+    try:
+        result = compare(load_results(Path(args.a)), load_results(Path(args.b)))
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        print(f"compare error: {exc}", file=sys.stderr)
+        return 2
+    if args.out:
+        json_path, md_path = write_compare(Path(args.out), result)
+        s = result["summary"]
+        print(
+            f"{result['a']['provider']} -> {result['b']['provider']} on {result['a']['suite']}: "
+            f"passed {s['passed_a']} -> {s['passed_b']}, newly passing {s['newly_passing']}, "
+            f"newly failing {s['newly_failing']}"
+        )
+        print(f"  wrote {md_path} and {json_path}")
+        return 0
+    if args.json:
+        print(json.dumps(result, indent=1, sort_keys=True))
+    else:
+        sys.stdout.write(render_markdown(result))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
+    if args.cmd == "compare":
+        return _cmd_compare(args)
+
     suite = _load(args.suite)
     if suite is None:
         return 2
