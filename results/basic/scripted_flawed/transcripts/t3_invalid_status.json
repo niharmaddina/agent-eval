@@ -1,0 +1,68 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "state: ticket T-1002.status is 'in_progress', expected 'resolved'"
+ ],
+ "final_answer": "I could not complete the task because a tool failed: invalid arguments: $.status: 'done' is not one of ['open', 'in_progress', 'blocked', 'resolved', 'closed']",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_invalid_status",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1002",
+      "status": "done"
+     },
+     "id": "call_1",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 759,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "invalid arguments: $.status: 'done' is not one of ['open', 'in_progress', 'blocked', 'resolved', 'closed']",
+   "is_error": true,
+   "step": 1,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: invalid arguments: $.status: 'done' is not one of ['open', 'in_progress', 'blocked', 'resolved', 'closed']",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 799,
+    "out": 39
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1558,
+  "output_tokens": 51
+ },
+ "validation_errors": 1
+}

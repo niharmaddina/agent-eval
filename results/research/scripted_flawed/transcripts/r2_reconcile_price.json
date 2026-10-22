@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['$40', 'https://atlas.example/pricing'] in 'The Team plan costs $35 per seat per month (https://news.example/tools/atlas-review).'"
+ ],
+ "final_answer": "The Team plan costs $35 per seat per month (https://news.example/tools/atlas-review).",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r2_reconcile_price",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://news.example/tools/atlas-review"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 293,
+    "out": 14
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Review: Atlas deployment tool\nhttps://news.example/tools/atlas-review\n\nPublished 2026-01-10.\nAtlas is a solid internal deployment tool. The Team plan costs $35 per seat per month.\nExport is limited to CSV; Parquet support is promised for a later release.\nVerdict: recommended for small ops teams.\n\nLinks:\n- https://atlas.example/\n- https://atlas.example/pricing",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "The Team plan costs $35 per seat per month (https://news.example/tools/atlas-review).",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 399,
+    "out": 21
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 692,
+  "output_tokens": 35
+ },
+ "validation_errors": 0
+}

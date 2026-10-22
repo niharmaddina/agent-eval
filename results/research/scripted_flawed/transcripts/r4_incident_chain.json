@@ -1,0 +1,167 @@
+{
+ "budget": {
+  "max_steps": 5,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['TLS certificate', '42 minutes'] in ''"
+ ],
+ "final_answer": "",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 5,
+ "stop_reason": "step_budget",
+ "task_id": "r4_incident_chain",
+ "tool_calls": 5,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 205,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 302,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas documentation\nhttps://atlas.example/docs\n\nGuides for installing, configuring and operating Atlas.\nStart with the installation guide, then the configuration guide.\n\nLinks:\n- https://atlas.example/docs/install\n- https://atlas.example/docs/config\n- https://atlas.example/docs/limits\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/limits"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 396,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Atlas rate limits and quotas\nhttps://atlas.example/docs/limits\n\nAPI requests: 600 per minute per API key.\nConcurrent deployments: 5 per project.\nWebhook delivery retries: 8 attempts with exponential backoff (raised from 5 in release 1.2.0).\nLast reviewed 2026-04-02.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/changelog"
+     },
+     "id": "call_4",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 489,
+    "out": 14
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "# Atlas changelog\nhttps://atlas.example/docs/changelog\n\nRelease history for Atlas.\n1.2.0 (2026-03-14): Added export to CSV and Parquet. Webhook retry limit raised from 5 to 8.\n1.1.0 (2025-11-20): Fixed login bug affecting SSO users.\n1.0.0 (2025-06-01): First stable release.\n\nLinks:\n- https://atlas.example/blog/2026-03-release-1-2",
+   "is_error": false,
+   "step": 4,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 5,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://status.example/atlas"
+     },
+     "id": "call_5",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 587,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_5",
+   "content": "# Atlas service status\nhttps://status.example/atlas\n\nAll systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.\n\nLinks:\n- https://status.example/atlas/incidents/2026-09-18",
+   "is_error": false,
+   "step": 5,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1979,
+  "output_tokens": 60
+ },
+ "validation_errors": 0
+}

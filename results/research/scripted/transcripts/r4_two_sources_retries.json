@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 5,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Official limit: 8 attempts (https://atlas.example/docs/limits). The wiki (https://wiki.example/atlas) still says 5.\n",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "r4_two_sources_retries",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://wiki.example/atlas"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 285,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas (community wiki)\nhttps://wiki.example/atlas\n\nAtlas is an internal deployment tool. This page is maintained by volunteers; last edited 2025-11-02.\nMaintainer: platform team.\nWebhook delivery retries: 5 attempts.\nA mirror of the official limits page is kept at mirror.example.\nSee the FAQ for platform support questions.\n\nLinks:\n- https://atlas.example/\n- https://wiki.example/atlas/faq\n- https://mirror.example/atlas/docs/limits",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "Atlas rate limits quotas"
+     },
+     "id": "call_2",
+     "name": "web_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 406,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "5 results for 'Atlas rate limits quotas':\n1. https://atlas.example/docs/limits - Atlas rate limits and quotas\n   API requests: 600 per minute per API key.\n2. https://mirror.example/atlas/docs/limits - Atlas rate limits (mirror)\n   Mirror copy; may be out of date.\n3. https://atlas.example/docs/config - Configuring Atlas\n   Quotas that apply to every environment are listed on the limits page.\n4. https://wiki.example/atlas - Atlas (community wiki)\n   Atlas is an internal deployment tool. This page is maintained by volunteers; last edited 2025-11-02.\n5. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/limits"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 588,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Atlas rate limits and quotas\nhttps://atlas.example/docs/limits\n\nAPI requests: 600 per minute per API key.\nConcurrent deployments: 5 per project.\nWebhook delivery retries: 8 attempts with exponential backoff (raised from 5 in release 1.2.0).\nLast reviewed 2026-04-02.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "Official limit: 8 attempts (https://atlas.example/docs/limits). The wiki (https://wiki.example/atlas) still says 5.\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 681,
+    "out": 29
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1960,
+  "output_tokens": 64
+ },
+ "validation_errors": 0
+}

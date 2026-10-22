@@ -1,0 +1,93 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "The review (https://news.example/tools/atlas-review, published 2026-01-10) says $35 per seat per month; the official pricing page (https://atlas.example/pricing) says $40 per seat per month, effective 2026-02-01. The official figure is current; the review predates the price change.\n",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "r2_reconcile_price",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://news.example/tools/atlas-review"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 293,
+    "out": 14
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Review: Atlas deployment tool\nhttps://news.example/tools/atlas-review\n\nPublished 2026-01-10.\nAtlas is a solid internal deployment tool. The Team plan costs $35 per seat per month.\nExport is limited to CSV; Parquet support is promised for a later release.\nVerdict: recommended for small ops teams.\n\nLinks:\n- https://atlas.example/\n- https://atlas.example/pricing",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 399,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas pricing\nhttps://atlas.example/pricing\n\nTeam plan: $40 per seat per month, billed annually. Includes 5 concurrent deployments.\nEnterprise plan: custom pricing, contact sales@atlas.example.\nPrices effective 2026-02-01. The 2025 price list has been retired.\n\nLinks:\n- https://atlas.example/pricing/2025\n- https://atlas.example/docs/limits",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "The review (https://news.example/tools/atlas-review, published 2026-01-10) says $35 per seat per month; the official pricing page (https://atlas.example/pricing) says $40 per seat per month, effective 2026-02-01. The official figure is current; the review predates the price change.\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 498,
+    "out": 70
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1190,
+  "output_tokens": 96
+ },
+ "validation_errors": 0
+}

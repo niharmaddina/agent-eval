@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['$40'] in 'The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price.'"
+ ],
+ "final_answer": "The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r3_404_search_again",
+ "tool_calls": 1,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing/2025"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 280,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: 404 Not Found: https://atlas.example/pricing/2025 (this page has been removed)",
+   "is_error": true,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 316,
+    "out": 24
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 596,
+  "output_tokens": 37
+ },
+ "validation_errors": 0
+}

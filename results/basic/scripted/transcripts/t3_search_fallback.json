@@ -1,0 +1,149 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "/data/sales_2024.csv does not exist; used /data/sales_q2.csv, total 3010.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 5,
+ "stop_reason": "answered",
+ "task_id": "t3_search_fallback",
+ "tool_calls": 4,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_2024.csv"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 775,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: file not found: /data/sales_2024.csv",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "north,1500"
+     },
+     "id": "call_2",
+     "name": "fs_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 796,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "/data/sales_q2.csv",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q2.csv"
+     },
+     "id": "call_3",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 810,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "region,amount\nnorth,1500\nsouth,900\neast,610\n",
+   "is_error": false,
+   "step": 3,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "1500 + 900 + 610"
+     },
+     "id": "call_4",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 832,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "3010",
+   "is_error": false,
+   "step": 4,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 5,
+   "text": "/data/sales_2024.csv does not exist; used /data/sales_q2.csv, total 3010.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 846,
+    "out": 18
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 4059,
+  "output_tokens": 55
+ },
+ "validation_errors": 0
+}

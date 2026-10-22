@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['2026-03-14', 'https://atlas.example/docs/changelog'] in 'Release 1.2.0 raised the limit (https://atlas.example/docs/limits); it shipped in 2026.'"
+ ],
+ "final_answer": "Release 1.2.0 raised the limit (https://atlas.example/docs/limits); it shipped in 2026.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r2_fact_two_pages",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/limits"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 282,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas rate limits and quotas\nhttps://atlas.example/docs/limits\n\nAPI requests: 600 per minute per API key.\nConcurrent deployments: 5 per project.\nWebhook delivery retries: 8 attempts with exponential backoff (raised from 5 in release 1.2.0).\nLast reviewed 2026-04-02.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Release 1.2.0 raised the limit (https://atlas.example/docs/limits); it shipped in 2026.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 375,
+    "out": 21
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 657,
+  "output_tokens": 34
+ },
+ "validation_errors": 0
+}

@@ -1,0 +1,39 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['ops team'] in 'Atlas is maintained by the platform team.'"
+ ],
+ "final_answer": "Atlas is maintained by the platform team.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 1,
+ "stop_reason": "answered",
+ "task_id": "r1_fetch_owner",
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 1,
+   "text": "Atlas is maintained by the platform team.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 255,
+    "out": 10
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 255,
+  "output_tokens": 10
+ },
+ "validation_errors": 0
+}

@@ -1,0 +1,93 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Config: {\"env\": \"staging\", \"retries\": 3, \"timeout_s\": 30}\n",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "t3_bad_argument",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "file": "/config/app.json"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "invalid arguments: $: missing required key 'path'; $: unknown key 'file'",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/config/app.json"
+     },
+     "id": "call_2",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 779,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "{\"env\": \"staging\", \"retries\": 3, \"timeout_s\": 30}\n",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "Config: {\"env\": \"staging\", \"retries\": 3, \"timeout_s\": 30}\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 801,
+    "out": 14
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2331,
+  "output_tokens": 30
+ },
+ "validation_errors": 1
+}

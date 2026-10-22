@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['pip install atlas-cli'] in 'The URL atlas.example/docs/install could not be fetched.'"
+ ],
+ "final_answer": "The URL atlas.example/docs/install could not be fetched.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r3_bad_url_scheme",
+ "tool_calls": 1,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "atlas.example/docs/install"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 261,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: invalid url 'atlas.example/docs/install': must be absolute and start with https://",
+   "is_error": true,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "The URL atlas.example/docs/install could not be fetched.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 296,
+    "out": 14
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 557,
+  "output_tokens": 25
+ },
+ "validation_errors": 0
+}

@@ -1,0 +1,374 @@
+{
+ "failures": {
+  "gave_up_after_error": 4,
+  "step_budget": 3,
+  "wrong_answer": 5
+ },
+ "meta": {
+  "agent_eval_version": "0.2.0",
+  "generated_at": "2026-10-12T04:50:57Z",
+  "is_model_result": false,
+  "model": "replay-v1",
+  "provider": "scripted_flawed",
+  "suite": "research",
+  "suite_version": 1
+ },
+ "overall": {
+  "cost_per_success_usd": 0.0,
+  "estimated_cost_usd": 0.0,
+  "input_tokens": 17988,
+  "mean_latency_ms": null,
+  "mean_steps": 2.76,
+  "output_tokens": 1071,
+  "passed": 5,
+  "success_rate": 0.2941,
+  "tokens_estimated": true,
+  "tool_calls": 33,
+  "tool_error_rate": 0.1515,
+  "tool_errors": 5,
+  "total": 17,
+  "validation_errors": 0
+ },
+ "stop_reasons": {
+  "answered": 14,
+  "step_budget": 3
+ },
+ "tasks": [
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: missing ['ops team'] in 'Atlas is maintained by the platform team.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 1,
+   "stop_reason": "answered",
+   "task_id": "r1_fetch_owner",
+   "tier": 1,
+   "tokens": 265,
+   "tool_calls": 0,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "latency_ms": null,
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r1_fetch_uptime",
+   "tier": 1,
+   "tokens": 676,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "latency_ms": null,
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r1_search_root_cause",
+   "tier": 1,
+   "tokens": 890,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "latency_ms": null,
+   "passed": true,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r1_search_windows",
+   "tier": 1,
+   "tokens": 890,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: missing ['2026-03-14', 'https://atlas.example/docs/changelog'] in 'Release 1.2.0 raised the limit (https://atlas.example/docs/limits); it shipped in 2026.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r2_fact_two_pages",
+   "tier": 2,
+   "tokens": 691,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: does not match /retries[^0-9]{0,40}\\b3\\b/ in 'Atlas retries a deployment 5 times by default.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "r2_link_chain",
+   "tier": 2,
+   "tokens": 902,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: missing ['$40', 'https://atlas.example/pricing'] in 'The Team plan costs $35 per seat per month (https://news.example/tools/atlas-review).'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r2_reconcile_price",
+   "tier": 2,
+   "tokens": 727,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "wrong_answer",
+   "failures": [
+    "answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r2_reconcile_retries",
+   "tier": 2,
+   "tokens": 721,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "latency_ms": null,
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "r2_search_then_fetch",
+   "tier": 2,
+   "tokens": 1355,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": null,
+   "failures": [],
+   "latency_ms": null,
+   "passed": true,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "r2_seats_cost",
+   "tier": 2,
+   "tokens": 1271,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['$40'] in 'The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r3_404_search_again",
+   "tier": 3,
+   "tokens": 633,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['600'] in 'The mirror at https://mirror.example/atlas/docs/limits timed out, so I could not read the rate limits.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "r3_timeout_mirror",
+   "tier": 3,
+   "tokens": 1220,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['pip install atlas-cli'] in 'The URL atlas.example/docs/install could not be fetched.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 2,
+   "stop_reason": "answered",
+   "task_id": "r3_bad_url_scheme",
+   "tier": 3,
+   "tokens": 582,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "gave_up_after_error",
+   "failures": [
+    "answer: missing ['retired', '$40'] in 'I could not complete the task: the 2025 price list returned 404.'"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 3,
+   "stop_reason": "answered",
+   "task_id": "r3_dead_link_report",
+   "tier": 3,
+   "tokens": 1157,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "step_budget",
+   "failures": [
+    "answer: missing ['TLS certificate', '42 minutes'] in ''"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 5,
+   "stop_reason": "step_budget",
+   "task_id": "r4_incident_chain",
+   "tier": 4,
+   "tokens": 2039,
+   "tool_calls": 5,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "step_budget",
+   "failures": [
+    "answer: does not match /\\$5\\b|\\b5 dollars/ in ''"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 5,
+   "stop_reason": "step_budget",
+   "task_id": "r4_price_gap",
+   "tier": 4,
+   "tokens": 2493,
+   "tool_calls": 5,
+   "tool_errors": 0,
+   "validation_errors": 0
+  },
+  {
+   "failure_category": "step_budget",
+   "failures": [
+    "answer: missing ['5', '8', 'https://wiki.example/atlas', 'https://atlas.example/docs/limits'] in ''"
+   ],
+   "latency_ms": null,
+   "passed": false,
+   "steps": 5,
+   "stop_reason": "step_budget",
+   "task_id": "r4_two_sources_retries",
+   "tier": 4,
+   "tokens": 2547,
+   "tool_calls": 5,
+   "tool_errors": 1,
+   "validation_errors": 0
+  }
+ ],
+ "tiers": [
+  {
+   "cost_per_success_usd": 0.0,
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 2262,
+   "label": "single lookup",
+   "mean_latency_ms": null,
+   "mean_steps": 1.75,
+   "output_tokens": 459,
+   "passed": 3,
+   "success_rate": 0.75,
+   "tier": 1,
+   "tokens_estimated": true,
+   "tool_calls": 3,
+   "tool_error_rate": 0.0,
+   "tool_errors": 0,
+   "total": 4,
+   "validation_errors": 0
+  },
+  {
+   "cost_per_success_usd": 0.0,
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 5390,
+   "label": "multi-page",
+   "mean_latency_ms": null,
+   "mean_steps": 2.5,
+   "output_tokens": 277,
+   "passed": 2,
+   "success_rate": 0.3333,
+   "tier": 2,
+   "tokens_estimated": true,
+   "tool_calls": 9,
+   "tool_error_rate": 0.0,
+   "tool_errors": 0,
+   "total": 6,
+   "validation_errors": 0
+  },
+  {
+   "cost_per_success_usd": null,
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 3438,
+   "label": "error recovery",
+   "mean_latency_ms": null,
+   "mean_steps": 2.5,
+   "output_tokens": 154,
+   "passed": 0,
+   "success_rate": 0.0,
+   "tier": 3,
+   "tokens_estimated": true,
+   "tool_calls": 6,
+   "tool_error_rate": 0.6667,
+   "tool_errors": 4,
+   "total": 4,
+   "validation_errors": 0
+  },
+  {
+   "cost_per_success_usd": null,
+   "estimated_cost_usd": 0.0,
+   "input_tokens": 6898,
+   "label": "budget pressure",
+   "mean_latency_ms": null,
+   "mean_steps": 5.0,
+   "output_tokens": 181,
+   "passed": 0,
+   "success_rate": 0.0,
+   "tier": 4,
+   "tokens_estimated": true,
+   "tool_calls": 15,
+   "tool_error_rate": 0.0667,
+   "tool_errors": 1,
+   "total": 3,
+   "validation_errors": 0
+  }
+ ]
+}

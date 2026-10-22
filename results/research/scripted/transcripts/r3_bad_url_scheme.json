@@ -1,0 +1,93 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "# Installing Atlas\nhttps://atlas.example/docs/install\n\nAtlas requires Python 3.11 or newer and runs on Linux and macOS.\nInstall with: pip install atlas-cli\nThen run `atlas init` once per project.\nAfter installing, set the values described in the configuration guide.\n\nLinks:\n- https://atlas.example/docs/config",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "r3_bad_url_scheme",
+ "tool_calls": 2,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "atlas.example/docs/install"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 261,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: invalid url 'atlas.example/docs/install': must be absolute and start with https://",
+   "is_error": true,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/install"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 296,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Installing Atlas\nhttps://atlas.example/docs/install\n\nAtlas requires Python 3.11 or newer and runs on Linux and macOS.\nInstall with: pip install atlas-cli\nThen run `atlas init` once per project.\nAfter installing, set the values described in the configuration guide.\n\nLinks:\n- https://atlas.example/docs/config",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "# Installing Atlas\nhttps://atlas.example/docs/install\n\nAtlas requires Python 3.11 or newer and runs on Linux and macOS.\nInstall with: pip install atlas-cli\nThen run `atlas init` once per project.\nAfter installing, set the values described in the configuration guide.\n\nLinks:\n- https://atlas.example/docs/config",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 388,
+    "out": 77
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 945,
+  "output_tokens": 101
+ },
+ "validation_errors": 0
+}

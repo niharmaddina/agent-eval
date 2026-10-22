@@ -1,0 +1,69 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "state: ticket T-1004.priority is 'low', expected 'high'",
+  "answer: missing ['T-1004'] in 'I could not complete the task because a tool failed: error: 404: ticket T-1010 not found'"
+ ],
+ "final_answer": "I could not complete the task because a tool failed: error: 404: ticket T-1010 not found",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_ticket_404",
+ "tool_calls": 1,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1010",
+      "priority": "high"
+     },
+     "id": "call_1",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 780,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: 404: ticket T-1010 not found",
+   "is_error": true,
+   "step": 1,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: error: 404: ticket T-1010 not found",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 802,
+    "out": 22
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1582,
+  "output_tokens": 34
+ },
+ "validation_errors": 0
+}

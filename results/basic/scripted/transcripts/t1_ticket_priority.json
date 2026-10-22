@@ -1,0 +1,66 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "T-1007 is now medium priority.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_ticket_priority",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1007",
+      "priority": "medium"
+     },
+     "id": "call_1",
+     "name": "tickets_update"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 748,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "updated: T-1007 [open/medium] Search ignores accented characters (assignee: unassigned)",
+   "is_error": false,
+   "step": 1,
+   "tool": "tickets_update",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "T-1007 is now medium priority.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 784,
+    "out": 7
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1532,
+  "output_tokens": 20
+ },
+ "validation_errors": 0
+}

@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Default deploy retries: 3 (https://atlas.example/docs/config).",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "r2_link_chain",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 194,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 291,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas documentation\nhttps://atlas.example/docs\n\nGuides for installing, configuring and operating Atlas.\nStart with the installation guide, then the configuration guide.\n\nLinks:\n- https://atlas.example/docs/install\n- https://atlas.example/docs/config\n- https://atlas.example/docs/limits\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/config"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 385,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Configuring Atlas\nhttps://atlas.example/docs/config\n\nConfiguration lives in app.json.\nretries: number of deploy retries, default 3.\ntimeout_s: per-step timeout in seconds, default 30.\nenv: deployment environment name, default staging.\nQuotas that apply to every environment are listed on the limits page.\n\nLinks:\n- https://atlas.example/docs/limits",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "Default deploy retries: 3 (https://atlas.example/docs/config).",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 487,
+    "out": 15
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1357,
+  "output_tokens": 49
+ },
+ "validation_errors": 0
+}

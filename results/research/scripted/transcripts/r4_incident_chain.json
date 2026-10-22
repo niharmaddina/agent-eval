@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 5,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "# Incident 2026-09-18: webhook delivery delays\nhttps://status.example/atlas/incidents/2026-09-18\n\nDuration: 42 minutes (09:12 to 09:54 UTC).\nRoot cause: an expired TLS certificate on the webhook relay.\nAction items: automate certificate renewal; add expiry alerting 14 days ahead.\n\nLinks:\n- https://status.example/atlas",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "r4_incident_chain",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 205,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://status.example/atlas"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 302,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas service status\nhttps://status.example/atlas\n\nAll systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.\n\nLinks:\n- https://status.example/atlas/incidents/2026-09-18",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://status.example/atlas/incidents/2026-09-18"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 382,
+    "out": 17
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Incident 2026-09-18: webhook delivery delays\nhttps://status.example/atlas/incidents/2026-09-18\n\nDuration: 42 minutes (09:12 to 09:54 UTC).\nRoot cause: an expired TLS certificate on the webhook relay.\nAction items: automate certificate renewal; add expiry alerting 14 days ahead.\n\nLinks:\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "# Incident 2026-09-18: webhook delivery delays\nhttps://status.example/atlas/incidents/2026-09-18\n\nDuration: 42 minutes (09:12 to 09:54 UTC).\nRoot cause: an expired TLS certificate on the webhook relay.\nAction items: automate certificate renewal; add expiry alerting 14 days ahead.\n\nLinks:\n- https://status.example/atlas",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 480,
+    "out": 79
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1369,
+  "output_tokens": 118
+ },
+ "validation_errors": 0
+}

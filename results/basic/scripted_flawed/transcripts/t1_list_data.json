@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Files in /data: sales_q1.csv\nsales_q2.csv",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_list_data",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data"
+     },
+     "id": "call_1",
+     "name": "fs_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 743,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "sales_q1.csv\nsales_q2.csv",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_list",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Files in /data: sales_q1.csv\nsales_q2.csv",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 757,
+    "out": 10
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1500,
+  "output_tokens": 16
+ },
+ "validation_errors": 0
+}

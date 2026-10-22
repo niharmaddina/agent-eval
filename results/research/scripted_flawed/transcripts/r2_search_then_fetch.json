@@ -1,0 +1,93 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "# Atlas 1.2.0 released\nhttps://atlas.example/blog/2026-03-release-1-2\n\nPosted 2026-03-14 by Priya Natarajan, release manager.\nAtlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\nUpgrade with: pip install --upgrade atlas-cli\nFull details are in the changelog.\n\nLinks:\n- https://atlas.example/docs/changelog",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "r2_search_then_fetch",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "Atlas 1.2.0 released blog"
+     },
+     "id": "call_1",
+     "name": "web_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 263,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "5 results for 'Atlas 1.2.0 released blog':\n1. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n2. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n3. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.\n4. https://atlas.example/docs/changelog - Atlas changelog\n   Release history for Atlas.\n5. https://atlas.example/docs/install - Installing Atlas\n   Atlas requires Python 3.11 or newer and runs on Linux and macOS.",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/blog/2026-03-release-1-2"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 439,
+    "out": 16
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas 1.2.0 released\nhttps://atlas.example/blog/2026-03-release-1-2\n\nPosted 2026-03-14 by Priya Natarajan, release manager.\nAtlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\nUpgrade with: pip install --upgrade atlas-cli\nFull details are in the changelog.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "# Atlas 1.2.0 released\nhttps://atlas.example/blog/2026-03-release-1-2\n\nPosted 2026-03-14 by Priya Natarajan, release manager.\nAtlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\nUpgrade with: pip install --upgrade atlas-cli\nFull details are in the changelog.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 541,
+    "out": 84
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1243,
+  "output_tokens": 112
+ },
+ "validation_errors": 0
+}

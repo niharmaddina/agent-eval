@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Q2 exceeded Q1 by 530.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "t2_q1_vs_q2",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q1.csv"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 758,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "region,amount\nnorth,1200\nsouth,850\neast,430\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q2.csv"
+     },
+     "id": "call_2",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 780,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "region,amount\nnorth,1500\nsouth,900\neast,610\n",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "(1500 + 900 + 610) - (1200 + 850 + 430)"
+     },
+     "id": "call_3",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 802,
+    "out": 16
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "530",
+   "is_error": false,
+   "step": 3,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "Q2 exceeded Q1 by 530.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 821,
+    "out": 5
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 3161,
+  "output_tokens": 39
+ },
+ "validation_errors": 0
+}

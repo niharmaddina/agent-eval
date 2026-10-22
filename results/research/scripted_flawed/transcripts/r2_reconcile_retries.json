@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['8', 'https://atlas.example/docs/limits'] in 'Webhook deliveries are retried 5 times (https://wiki.example/atlas).'"
+ ],
+ "final_answer": "Webhook deliveries are retried 5 times (https://wiki.example/atlas).",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r2_reconcile_retries",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://wiki.example/atlas"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 286,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas (community wiki)\nhttps://wiki.example/atlas\n\nAtlas is an internal deployment tool. This page is maintained by volunteers; last edited 2025-11-02.\nMaintainer: platform team.\nWebhook delivery retries: 5 attempts.\nA mirror of the official limits page is kept at mirror.example.\nSee the FAQ for platform support questions.\n\nLinks:\n- https://atlas.example/\n- https://wiki.example/atlas/faq\n- https://mirror.example/atlas/docs/limits",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Webhook deliveries are retried 5 times (https://wiki.example/atlas).",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 407,
+    "out": 17
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 693,
+  "output_tokens": 28
+ },
+ "validation_errors": 0
+}

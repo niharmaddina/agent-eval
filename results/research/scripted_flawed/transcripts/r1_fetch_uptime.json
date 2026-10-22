@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "# Atlas service status\nhttps://status.example/atlas\n\nAll systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.\n\nLinks:\n- https://status.example/atlas/incidents/2026-09-18",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r1_fetch_uptime",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://status.example/atlas"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 259,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas service status\nhttps://status.example/atlas\n\nAll systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.\n\nLinks:\n- https://status.example/atlas/incidents/2026-09-18",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "# Atlas service status\nhttps://status.example/atlas\n\nAll systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.\n\nLinks:\n- https://status.example/atlas/incidents/2026-09-18",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 339,
+    "out": 66
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 598,
+  "output_tokens": 78
+ },
+ "validation_errors": 0
+}

@@ -1,0 +1,94 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "There are 3 open tickets; ids written to /reports/open_tickets.txt.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "t2_open_tickets_report",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "status": "open"
+     },
+     "id": "call_1",
+     "name": "tickets_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 764,
+    "out": 7
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "T-1001 [open/high] Login page returns 500 for SSO users (assignee: dana)\nT-1003 [open/urgent] Billing invoice shows wrong currency (assignee: dana)\nT-1007 [open/low] Search ignores accented characters (assignee: unassigned)",
+   "is_error": false,
+   "step": 1,
+   "tool": "tickets_list",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "content": "T-1001\nT-1003\nT-1007\n",
+      "path": "/reports/open_tickets.txt"
+     },
+     "id": "call_2",
+     "name": "fs_write"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 828,
+    "out": 21
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "wrote 21 characters to /reports/open_tickets.txt",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_write",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "There are 3 open tickets; ids written to /reports/open_tickets.txt.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 863,
+    "out": 16
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2455,
+  "output_tokens": 44
+ },
+ "validation_errors": 0
+}

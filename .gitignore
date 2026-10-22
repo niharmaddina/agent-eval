@@ -18,7 +18,8 @@ dist/
 .idea/
 .vscode/
 
-# scratch output; committed baselines live in results/scripted*/
-results/anthropic/
-results/openai_compat/
+# scratch output; committed baselines live in results/<suite>/scripted*/ and results/<suite>/compare/
+results/*/anthropic/
+results/*/openai_compat/
 results/tmp*/
+results/*/tmp*/

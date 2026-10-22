@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 5,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "The review understates the price by $5 per seat per month ($35 vs $40).",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "r4_price_gap",
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://news.example/tools/atlas-review"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 286,
+    "out": 14
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Review: Atlas deployment tool\nhttps://news.example/tools/atlas-review\n\nPublished 2026-01-10.\nAtlas is a solid internal deployment tool. The Team plan costs $35 per seat per month.\nExport is limited to CSV; Parquet support is promised for a later release.\nVerdict: recommended for small ops teams.\n\nLinks:\n- https://atlas.example/\n- https://atlas.example/pricing",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 392,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas pricing\nhttps://atlas.example/pricing\n\nTeam plan: $40 per seat per month, billed annually. Includes 5 concurrent deployments.\nEnterprise plan: custom pricing, contact sales@atlas.example.\nPrices effective 2026-02-01. The 2025 price list has been retired.\n\nLinks:\n- https://atlas.example/pricing/2025\n- https://atlas.example/docs/limits",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "40 - 35"
+     },
+     "id": "call_3",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 491,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "5",
+   "is_error": false,
+   "step": 3,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "The review understates the price by $5 per seat per month ($35 vs $40).",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 502,
+    "out": 17
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1671,
+  "output_tokens": 51
+ },
+ "validation_errors": 0
+}

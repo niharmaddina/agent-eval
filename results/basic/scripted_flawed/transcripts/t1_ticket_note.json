@@ -1,0 +1,66 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Note added to T-1001.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_ticket_note",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1001",
+      "text": "Customer called again on Monday"
+     },
+     "id": "call_1",
+     "name": "tickets_add_note"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 753,
+    "out": 18
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "note #1 added to T-1001",
+   "is_error": false,
+   "step": 1,
+   "tool": "tickets_add_note",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Note added to T-1001.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 778,
+    "out": 5
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1531,
+  "output_tokens": 23
+ },
+ "validation_errors": 0
+}

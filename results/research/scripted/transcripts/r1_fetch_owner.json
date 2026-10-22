@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "From https://atlas.example/ :\n# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r1_fetch_owner",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 255,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "From https://atlas.example/ :\n# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 352,
+    "out": 93
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 607,
+  "output_tokens": 103
+ },
+ "validation_errors": 0
+}

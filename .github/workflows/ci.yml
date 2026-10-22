@@ -24,10 +24,15 @@ jobs:
       - name: Pytest (offline)
         run: pytest
       - name: Committed baselines reproduce byte-for-byte
-        # Regenerate both replay baselines with the timestamp pinned to the committed one;
-        # any drift in the harness, suite or report format shows up as a git diff.
+        # Regenerate every replay baseline and compare output with the timestamp pinned to the
+        # committed one; any drift in the harness, suites or report formats shows up as a git diff.
         run: |
-          export SOURCE_DATE_EPOCH="$(python -c 'import json,datetime as dt; t=json.load(open("results/scripted/results.json"))["meta"]["generated_at"]; print(int(dt.datetime.strptime(t,"%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.UTC).timestamp()))')"
-          agent-eval run --provider scripted        --suite agent_eval/tasks/basic.yaml --out results/scripted/
-          agent-eval run --provider scripted_flawed --suite agent_eval/tasks/basic.yaml --out results/scripted_flawed/
+          export SOURCE_DATE_EPOCH="$(python -c 'import json,datetime as dt; t=json.load(open("results/basic/scripted/results.json"))["meta"]["generated_at"]; print(int(dt.datetime.strptime(t,"%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.UTC).timestamp()))')"
+          for suite in basic research; do
+            agent-eval run --provider scripted        --suite agent_eval/tasks/$suite.yaml --out results/$suite/scripted/
+            agent-eval run --provider scripted_flawed --suite agent_eval/tasks/$suite.yaml --out results/$suite/scripted_flawed/
+            agent-eval compare results/$suite/scripted/ results/$suite/scripted_flawed/ --out results/$suite/compare/
+          done
+          git status --porcelain -- results/
           git diff --exit-code --stat -- results/
+          test -z "$(git status --porcelain -- results/)"

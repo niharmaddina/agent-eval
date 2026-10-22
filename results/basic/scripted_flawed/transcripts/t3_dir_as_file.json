@@ -1,0 +1,67 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: missing ['1.2.0'] in 'I could not complete the task because a tool failed: error: /docs is a directory, not a file'"
+ ],
+ "final_answer": "I could not complete the task because a tool failed: error: /docs is a directory, not a file",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t3_dir_as_file",
+ "tool_calls": 1,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: /docs is a directory, not a file",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "I could not complete the task because a tool failed: error: /docs is a directory, not a file",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 768,
+    "out": 23
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1519,
+  "output_tokens": 29
+ },
+ "validation_errors": 0
+}

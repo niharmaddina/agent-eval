@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "https://atlas.example/pricing/2025 returns 404. The current pricing page https://atlas.example/pricing lists the Team plan at $40 per seat per month.\n",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "r3_404_search_again",
+ "tool_calls": 3,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing/2025"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 280,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: 404 Not Found: https://atlas.example/pricing/2025 (this page has been removed)",
+   "is_error": true,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "Atlas pricing"
+     },
+     "id": "call_2",
+     "name": "web_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 316,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "5 results for 'Atlas pricing':\n1. https://atlas.example/pricing - Atlas pricing\n   Enterprise plan: custom pricing, contact sales@atlas.example.\n2. https://atlas.example/pricing/2025 - Atlas pricing (2025 price list)\n   Retired 2025 price list for the Atlas Team plan.\n3. https://wiki.example/atlas/faq - Atlas FAQ\n   Q: Does Atlas run on Windows? A: No. Atlas supports Linux and macOS only.\n4. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n5. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 496,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Atlas pricing\nhttps://atlas.example/pricing\n\nTeam plan: $40 per seat per month, billed annually. Includes 5 concurrent deployments.\nEnterprise plan: custom pricing, contact sales@atlas.example.\nPrices effective 2026-02-01. The 2025 price list has been retired.\n\nLinks:\n- https://atlas.example/pricing/2025\n- https://atlas.example/docs/limits",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "https://atlas.example/pricing/2025 returns 404. The current pricing page https://atlas.example/pricing lists the Team plan at $40 per seat per month.\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 595,
+    "out": 37
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1687,
+  "output_tokens": 71
+ },
+ "validation_errors": 0
+}

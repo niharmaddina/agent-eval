@@ -1,0 +1,167 @@
+{
+ "budget": {
+  "max_steps": 5,
+  "max_tokens": 20000
+ },
+ "failures": [
+  "answer: does not match /\\$5\\b|\\b5 dollars/ in ''"
+ ],
+ "final_answer": "",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": false,
+ "provider": "scripted_flawed",
+ "steps": 5,
+ "stop_reason": "step_budget",
+ "task_id": "r4_price_gap",
+ "tool_calls": 5,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://news.example/tools/atlas-review"
+     },
+     "id": "call_1",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 286,
+    "out": 14
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "# Review: Atlas deployment tool\nhttps://news.example/tools/atlas-review\n\nPublished 2026-01-10.\nAtlas is a solid internal deployment tool. The Team plan costs $35 per seat per month.\nExport is limited to CSV; Parquet support is promised for a later release.\nVerdict: recommended for small ops teams.\n\nLinks:\n- https://atlas.example/\n- https://atlas.example/pricing",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/"
+     },
+     "id": "call_2",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 392,
+    "out": 10
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "# Atlas - internal deployment tool\nhttps://atlas.example/\n\nAtlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.\n\nLinks:\n- https://atlas.example/docs\n- https://atlas.example/pricing\n- https://atlas.example/blog/2026-03-release-1-2\n- https://status.example/atlas",
+   "is_error": false,
+   "step": 2,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/pricing"
+     },
+     "id": "call_3",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 489,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Atlas pricing\nhttps://atlas.example/pricing\n\nTeam plan: $40 per seat per month, billed annually. Includes 5 concurrent deployments.\nEnterprise plan: custom pricing, contact sales@atlas.example.\nPrices effective 2026-02-01. The 2025 price list has been retired.\n\nLinks:\n- https://atlas.example/pricing/2025\n- https://atlas.example/docs/limits",
+   "is_error": false,
+   "step": 3,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "url": "https://atlas.example/docs/limits"
+     },
+     "id": "call_4",
+     "name": "web_fetch"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 588,
+    "out": 13
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "# Atlas rate limits and quotas\nhttps://atlas.example/docs/limits\n\nAPI requests: 600 per minute per API key.\nConcurrent deployments: 5 per project.\nWebhook delivery retries: 8 attempts with exponential backoff (raised from 5 in release 1.2.0).\nLast reviewed 2026-04-02.\n\nLinks:\n- https://atlas.example/docs/changelog",
+   "is_error": false,
+   "step": 4,
+   "tool": "web_fetch",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 5,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "40 - 35"
+     },
+     "id": "call_5",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 681,
+    "out": 8
+   }
+  },
+  {
+   "call_id": "call_5",
+   "content": "5",
+   "is_error": false,
+   "step": 5,
+   "tool": "calculator",
+   "type": "tool_result"
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2436,
+  "output_tokens": 57
+ },
+ "validation_errors": 0
+}

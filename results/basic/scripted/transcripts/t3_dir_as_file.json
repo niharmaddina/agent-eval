@@ -1,0 +1,121 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Latest version from the changelog: # Changelog\n\n## 1.2.0\n- Added export\n\n## 1.1.0\n- Fixed login bug\n",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 4,
+ "stop_reason": "answered",
+ "task_id": "t3_dir_as_file",
+ "tool_calls": 3,
+ "tool_errors": 1,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 751,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "error: /docs is a directory, not a file",
+   "is_error": true,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs"
+     },
+     "id": "call_2",
+     "name": "fs_list"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 768,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "changelog.md\nreadme.txt",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_list",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/docs/changelog.md"
+     },
+     "id": "call_3",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 781,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "# Changelog\n\n## 1.2.0\n- Added export\n\n## 1.1.0\n- Fixed login bug\n",
+   "is_error": false,
+   "step": 3,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 4,
+   "text": "Latest version from the changelog: # Changelog\n\n## 1.2.0\n- Added export\n\n## 1.1.0\n- Fixed login bug\n",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 808,
+    "out": 25
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 3108,
+  "output_tokens": 46
+ },
+ "validation_errors": 0
+}

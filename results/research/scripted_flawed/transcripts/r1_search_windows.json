@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "5 results for 'Does Atlas run on Windows':\n1. https://wiki.example/atlas/faq - Atlas FAQ\n   Q: Does Atlas run on Windows? A: No. Atlas supports Linux and macOS only.\n2. https://atlas.example/docs/install - Installing Atlas\n   Atlas requires Python 3.11 or newer and runs on Linux and macOS.\n3. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n4. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n5. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r1_search_windows",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "Does Atlas run on Windows"
+     },
+     "id": "call_1",
+     "name": "web_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 261,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "5 results for 'Does Atlas run on Windows':\n1. https://wiki.example/atlas/faq - Atlas FAQ\n   Q: Does Atlas run on Windows? A: No. Atlas supports Linux and macOS only.\n2. https://atlas.example/docs/install - Installing Atlas\n   Atlas requires Python 3.11 or newer and runs on Linux and macOS.\n3. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n4. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n5. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "5 results for 'Does Atlas run on Windows':\n1. https://wiki.example/atlas/faq - Atlas FAQ\n   Q: Does Atlas run on Windows? A: No. Atlas supports Linux and macOS only.\n2. https://atlas.example/docs/install - Installing Atlas\n   Atlas requires Python 3.11 or newer and runs on Linux and macOS.\n3. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n4. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n5. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 446,
+    "out": 171
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 707,
+  "output_tokens": 183
+ },
+ "validation_errors": 0
+}

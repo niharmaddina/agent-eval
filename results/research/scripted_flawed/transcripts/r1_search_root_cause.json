@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Search results:\n5 results for 'Atlas incident root cause':\n1. https://status.example/atlas/incidents/2026-09-18 - Incident 2026-09-18: webhook delivery delays\n   Root cause: an expired TLS certificate on the webhook relay.\n2. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n3. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n4. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.\n5. https://atlas.example/docs/changelog - Atlas changelog\n   Release history for Atlas.",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "r1_search_root_cause",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "query": "Atlas incident root cause"
+     },
+     "id": "call_1",
+     "name": "web_search"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 258,
+    "out": 12
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "5 results for 'Atlas incident root cause':\n1. https://status.example/atlas/incidents/2026-09-18 - Incident 2026-09-18: webhook delivery delays\n   Root cause: an expired TLS certificate on the webhook relay.\n2. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n3. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n4. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.\n5. https://atlas.example/docs/changelog - Atlas changelog\n   Release history for Atlas.",
+   "is_error": false,
+   "step": 1,
+   "tool": "web_search",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Search results:\n5 results for 'Atlas incident root cause':\n1. https://status.example/atlas/incidents/2026-09-18 - Incident 2026-09-18: webhook delivery delays\n   Root cause: an expired TLS certificate on the webhook relay.\n2. https://atlas.example/ - Atlas - internal deployment tool\n   Atlas is the internal deployment tool for the Atlas rollout.\n3. https://atlas.example/blog/2026-03-release-1-2 - Atlas 1.2.0 released\n   Atlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\n4. https://atlas.example/docs - Atlas documentation\n   Guides for installing, configuring and operating Atlas.\n5. https://atlas.example/docs/changelog - Atlas changelog\n   Release history for Atlas.",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 444,
+    "out": 176
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 702,
+  "output_tokens": 188
+ },
+ "validation_errors": 0
+}

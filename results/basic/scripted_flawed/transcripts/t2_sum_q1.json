@@ -1,0 +1,93 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Q1 total: 2480",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted_flawed",
+ "steps": 3,
+ "stop_reason": "answered",
+ "task_id": "t2_sum_q1",
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q1.csv"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 754,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "region,amount\nnorth,1200\nsouth,850\neast,430\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "1200 + 850 + 430"
+     },
+     "id": "call_2",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 776,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "2480",
+   "is_error": false,
+   "step": 2,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 3,
+   "text": "Q1 total: 2480",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 790,
+    "out": 3
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 2320,
+  "output_tokens": 23
+ },
+ "validation_errors": 0
+}

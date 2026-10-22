@@ -1,0 +1,150 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "North average: 1350",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 5,
+ "stop_reason": "answered",
+ "task_id": "t2_north_average",
+ "tool_calls": 4,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q1.csv"
+     },
+     "id": "call_1",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 778,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "region,amount\nnorth,1200\nsouth,850\neast,430\n",
+   "is_error": false,
+   "step": 1,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 2,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "path": "/data/sales_q2.csv"
+     },
+     "id": "call_2",
+     "name": "fs_read"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 800,
+    "out": 9
+   }
+  },
+  {
+   "call_id": "call_2",
+   "content": "region,amount\nnorth,1500\nsouth,900\neast,610\n",
+   "is_error": false,
+   "step": 2,
+   "tool": "fs_read",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 3,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "expression": "(1200 + 1500) / 2"
+     },
+     "id": "call_3",
+     "name": "calculator"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 822,
+    "out": 11
+   }
+  },
+  {
+   "call_id": "call_3",
+   "content": "1350",
+   "is_error": false,
+   "step": 3,
+   "tool": "calculator",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 4,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "content": "1350\n",
+      "path": "/reports/north_avg.txt"
+     },
+     "id": "call_4",
+     "name": "fs_write"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 836,
+    "out": 15
+   }
+  },
+  {
+   "call_id": "call_4",
+   "content": "wrote 5 characters to /reports/north_avg.txt",
+   "is_error": false,
+   "step": 4,
+   "tool": "fs_write",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 5,
+   "text": "North average: 1350",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 864,
+    "out": 4
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 4100,
+  "output_tokens": 48
+ },
+ "validation_errors": 0
+}

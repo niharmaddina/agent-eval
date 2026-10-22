@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "max_steps": 10,
+  "max_tokens": 20000
+ },
+ "failures": [],
+ "final_answer": "Ticket T-1003: {\n \"assignee\": \"dana\",\n \"customer\": \"Initech\",\n \"id\": \"T-1003\",\n \"notes\": [],\n \"priority\": \"urgent\",\n \"status\": \"open\",\n \"title\": \"Billing invoice shows wrong currency\"\n}",
+ "latency_ms": null,
+ "model": "replay-v1",
+ "passed": true,
+ "provider": "scripted",
+ "steps": 2,
+ "stop_reason": "answered",
+ "task_id": "t1_ticket_get",
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "transcript": [
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "tool_use",
+   "step": 1,
+   "text": "",
+   "tool_calls": [
+    {
+     "args": {
+      "id": "T-1003"
+     },
+     "id": "call_1",
+     "name": "tickets_get"
+    }
+   ],
+   "type": "assistant",
+   "usage": {
+    "in": 746,
+    "out": 6
+   }
+  },
+  {
+   "call_id": "call_1",
+   "content": "{\n \"assignee\": \"dana\",\n \"customer\": \"Initech\",\n \"id\": \"T-1003\",\n \"notes\": [],\n \"priority\": \"urgent\",\n \"status\": \"open\",\n \"title\": \"Billing invoice shows wrong currency\"\n}",
+   "is_error": false,
+   "step": 1,
+   "tool": "tickets_get",
+   "type": "tool_result"
+  },
+  {
+   "latency_ms": null,
+   "provider_stop_reason": "end_turn",
+   "step": 2,
+   "text": "Ticket T-1003: {\n \"assignee\": \"dana\",\n \"customer\": \"Initech\",\n \"id\": \"T-1003\",\n \"notes\": [],\n \"priority\": \"urgent\",\n \"status\": \"open\",\n \"title\": \"Billing invoice shows wrong currency\"\n}",
+   "tool_calls": [],
+   "type": "assistant",
+   "usage": {
+    "in": 796,
+    "out": 46
+   }
+  }
+ ],
+ "usage": {
+  "estimated": true,
+  "input_tokens": 1542,
+  "output_tokens": 52
+ },
+ "validation_errors": 0
+}
