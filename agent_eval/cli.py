@@ -1,4 +1,4 @@
-"""Command-line entry point: ``agent-eval run|list-tasks|check-suite|compare``."""
+"""Command-line entry point: ``agent-eval run|list-tasks|check-suite|compare|replay``."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import yaml
 
 from agent_eval.compare import compare, load_results, render_markdown, write_compare
 from agent_eval.providers import PROVIDER_NAMES, ProviderUnavailable, get_provider
+from agent_eval.replay import render_transcript
 from agent_eval.runner import run_suite
 from agent_eval.tasks import DEFAULT_SUITE, Suite, load_suite
 
@@ -43,6 +44,9 @@ def _build_parser() -> argparse.ArgumentParser:
     cmp.add_argument("--out", default=None, help="write compare.md and compare.json here")
     cmp.add_argument("--json", action="store_true", help="print JSON instead of markdown")
 
+    rp = sub.add_parser("replay", help="pretty-print one transcript JSON")
+    rp.add_argument("transcript", help="path to transcripts/<task_id>.json")
+    rp.add_argument("--full", action="store_true", help="do not truncate tool results")
     return p
 
 
@@ -77,10 +81,24 @@ def _cmd_compare(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_replay(args: argparse.Namespace) -> int:
+    try:
+        record = json.loads(Path(args.transcript).read_text(encoding="utf-8"))
+        if not isinstance(record, dict) or "task_id" not in record:
+            raise ValueError("not a transcript file (missing 'task_id')")
+        sys.stdout.write(render_transcript(record, full=args.full))
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        print(f"replay error: {exc}", file=sys.stderr)
+        return 2
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     if args.cmd == "compare":
         return _cmd_compare(args)
+    if args.cmd == "replay":
+        return _cmd_replay(args)
 
     suite = _load(args.suite)
     if suite is None:
