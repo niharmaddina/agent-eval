@@ -10,7 +10,7 @@ import yaml
 
 from agent_eval.providers import PROVIDER_NAMES, ProviderUnavailable, get_provider
 from agent_eval.runner import run_suite
-from agent_eval.tasks import DEFAULT_SUITE, TIERS, load_suite
+from agent_eval.tasks import DEFAULT_SUITE, Suite, load_suite
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -22,41 +22,54 @@ def _build_parser() -> argparse.ArgumentParser:
     run = sub.add_parser("run", help="run a suite against a provider")
     run.add_argument("--provider", required=True, choices=PROVIDER_NAMES)
     run.add_argument("--suite", default=str(DEFAULT_SUITE), help="path to a suite YAML")
-    run.add_argument("--out", default=None, help="output directory (default results/<provider>/)")
+    run.add_argument(
+        "--out", default=None, help="output directory (default results/<suite>/<provider>/)"
+    )
     run.add_argument("--model", default=None, help="model id override for real providers")
     run.add_argument("--only", default=None, help="comma-separated task ids")
-    run.add_argument("--tier", type=int, choices=sorted(TIERS), default=None)
+    run.add_argument("--tier", type=int, default=None, help="run one tier of the suite")
 
     ls = sub.add_parser("list-tasks", help="print task ids and tiers")
     ls.add_argument("--suite", default=str(DEFAULT_SUITE))
 
     chk = sub.add_parser("check-suite", help="validate a suite file and exit")
     chk.add_argument("--suite", default=str(DEFAULT_SUITE))
+
     return p
+
+
+def _load(path: str) -> Suite | None:
+    try:
+        return load_suite(path)
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
+        print(f"suite error: {exc}", file=sys.stderr)
+        return None
 
 
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
-    try:
-        suite = load_suite(args.suite)
-    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
-        print(f"suite error: {exc}", file=sys.stderr)
+    suite = _load(args.suite)
+    if suite is None:
         return 2
-
     if args.cmd == "list-tasks":
         for t in suite.tasks:
-            print(f"{t.id}\ttier {t.tier}\t{t.prompt.splitlines()[0][:70]}")
+            label = suite.tiers.get(t.tier, "")
+            print(f"{t.id}\ttier {t.tier} ({label})\t{t.prompt.splitlines()[0][:70]}")
         return 0
     if args.cmd == "check-suite":
-        print(f"ok: {suite.name} v{suite.version}, {len(suite.tasks)} tasks")
+        tiers = ", ".join(f"{k}={v}" for k, v in suite.tiers.items())
+        print(f"ok: {suite.name} v{suite.version}, {len(suite.tasks)} tasks, tiers {tiers}")
         return 0
 
+    if args.tier is not None and args.tier not in suite.tiers:
+        print(f"suite error: tier {args.tier} not in {sorted(suite.tiers)}", file=sys.stderr)
+        return 2
     try:
         provider = get_provider(args.provider, model=args.model)
     except ProviderUnavailable as exc:
         print(f"provider unavailable: {exc}", file=sys.stderr)
         return 2
-    out = Path(args.out) if args.out else Path("results") / args.provider
+    out = Path(args.out) if args.out else Path("results") / suite.name / args.provider
     only = set(args.only.split(",")) if args.only else None
     result = run_suite(provider, suite, out, only=only, tier=args.tier)
     o = result["overall"]

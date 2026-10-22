@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
-from agent_eval.tasks import TIERS, Suite
+from agent_eval.tasks import Suite
 from agent_eval.types import RunRecord, Usage
 
 # USD per 1M tokens (input, output). Anthropic list prices as cached in the claude-api
@@ -81,7 +81,7 @@ def _aggregate(records: list[RunRecord], model: str) -> dict[str, Any]:
 def compute_metrics(records: list[RunRecord], suite: Suite, model: str) -> dict[str, Any]:
     tier_of = {t.id: t.tier for t in suite.tasks}
     tiers = []
-    for tier, label in sorted(TIERS.items()):
+    for tier, label in sorted(suite.tiers.items()):
         subset = [r for r in records if tier_of.get(r.task_id) == tier]
         if subset:
             tiers.append({"tier": tier, "label": label, **_aggregate(subset, model)})

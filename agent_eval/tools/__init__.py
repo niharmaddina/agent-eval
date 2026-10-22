@@ -7,8 +7,9 @@ from agent_eval.tools.calculator import CALCULATOR_TOOLS
 from agent_eval.tools.filesystem import FS_TOOLS
 from agent_eval.tools.sandbox import Sandbox
 from agent_eval.tools.tickets import TICKET_TOOLS
+from agent_eval.tools.web import WEB_TOOLS
 
-ALL_TOOLS: list[Tool] = [*FS_TOOLS, *CALCULATOR_TOOLS, *TICKET_TOOLS]
+ALL_TOOLS: list[Tool] = [*FS_TOOLS, *CALCULATOR_TOOLS, *TICKET_TOOLS, *WEB_TOOLS]
 
 
 class ToolRegistry:

@@ -5,8 +5,10 @@
 #                        the agent must read the error and take another route
 # Every task carries a `script` used by the scripted replay providers. `{last}` and `{rN}` in a
 # scripted answer are replaced with the content of the last / N-th successful tool result.
+# `tools` at suite level is the tool set offered to every task that does not declare its own.
 suite: basic
 version: 1
+tools: [fs_read, fs_write, fs_list, fs_search, calculator, tickets_list, tickets_get, tickets_update, tickets_add_note]
 tasks:
   # ---------------------------------------------------------------- tier 1: single tool
   - id: t1_read_readme

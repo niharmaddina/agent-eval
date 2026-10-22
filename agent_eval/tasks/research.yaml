@@ -1,0 +1,352 @@
+# Research suite over the deterministic fake web (web_search + web_fetch). Four tiers:
+#   1 single lookup    - one search or one fetch and a grounded answer
+#   2 multi-page       - a fact split across two pages, a link chain, two sources that disagree
+#   3 error recovery   - a 404, a timeout or a bad URL on the obvious first call; recover and finish
+#   4 budget pressure  - the shortest correct path is 3 tool calls and the step budget is 5
+# Every task carries two replay scripts. `script` is the intended path; `script_flawed` is
+# an explicit, documented flaw (stale memory, one source, giving up, wandering) that the
+# scripted_flawed provider replays verbatim. `notes` says what the flawed script models.
+suite: research
+version: 1
+tiers:
+  1: single lookup
+  2: multi-page
+  3: error recovery
+  4: budget pressure
+tasks:
+  # ---------------------------------------------------------------- tier 1: single lookup
+  - id: r1_fetch_owner
+    tier: 1
+    tools: [web_search, web_fetch]
+    notes: "Flawed: answers from memory without fetching; the remembered fact is the stale wiki's."
+    prompt: Fetch https://atlas.example/ and tell me which team owns Atlas.
+    check:
+      - answer_contains: "ops team"
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - answer: "From https://atlas.example/ :\n{last}"
+    script_flawed:
+      - answer: "Atlas is maintained by the platform team."
+
+  - id: r1_fetch_uptime
+    tier: 1
+    tools: [web_search, web_fetch]
+    notes: "Flawed: identical to the intended path; a direct fetch has nothing to get wrong."
+    prompt: Fetch https://status.example/atlas and report the uptime over the last 90 days.
+    check:
+      - answer_contains: "99.95"
+    script:
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas}}
+      - answer: "{last}"
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas}}
+      - answer: "{last}"
+
+  - id: r1_search_root_cause
+    tier: 1
+    tools: [web_search, web_fetch]
+    notes: "Flawed: identical to the intended path; the top search result carries the answer."
+    prompt: What was the root cause of the most recent Atlas incident? Use web_search.
+    check:
+      - answer_contains: "TLS certificate"
+    script:
+      - call: {tool: web_search, args: {query: "Atlas incident root cause"}}
+      - answer: "Search results:\n{last}"
+    script_flawed:
+      - call: {tool: web_search, args: {query: "Atlas incident root cause"}}
+      - answer: "Search results:\n{last}"
+
+  - id: r1_search_windows
+    tier: 1
+    tools: [web_search, web_fetch]
+    notes: "Flawed: identical to the intended path."
+    prompt: Does Atlas run on Windows? Search for the answer and name the platforms it supports.
+    check:
+      - answer_contains: ["Linux", "macOS"]
+    script:
+      - call: {tool: web_search, args: {query: "Does Atlas run on Windows"}}
+      - answer: "{last}"
+    script_flawed:
+      - call: {tool: web_search, args: {query: "Does Atlas run on Windows"}}
+      - answer: "{last}"
+
+  # ---------------------------------------------------------------- tier 2: multi-page
+  - id: r2_fact_two_pages
+    tier: 2
+    tools: [web_search, web_fetch]
+    notes: "Flawed: answers from the first page and never fetches the changelog for the date."
+    prompt: >
+      Which Atlas release raised the webhook retry limit, and on what date was that release
+      published? Start from https://atlas.example/docs/limits and cite the pages you used.
+    check:
+      - answer_contains: ["1.2.0", "2026-03-14", "https://atlas.example/docs/limits", "https://atlas.example/docs/changelog"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/changelog}}
+      - answer: >
+          Release 1.2.0 raised the webhook retry limit from 5 to 8 (https://atlas.example/docs/limits);
+          the changelog dates 1.2.0 to 2026-03-14 (https://atlas.example/docs/changelog).
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - answer: "Release 1.2.0 raised the limit (https://atlas.example/docs/limits); it shipped in 2026."
+
+  - id: r2_link_chain
+    tier: 2
+    tools: [web_fetch]
+    notes: "Flawed: stops one hop early and guesses the number."
+    prompt: >
+      Starting from https://atlas.example/ and following links only (no searching), find the
+      default number of deploy retries.
+    check:
+      - answer_matches: "retries[^0-9]{0,40}\\b3\\b"
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/config}}
+      - answer: "Default deploy retries: 3 (https://atlas.example/docs/config)."
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs}}
+      - answer: "Atlas retries a deployment 5 times by default."
+
+  - id: r2_reconcile_price
+    tier: 2
+    tools: [web_search, web_fetch]
+    notes: "Flawed: cites a single source and reports its stale figure."
+    prompt: >
+      The review at https://news.example/tools/atlas-review and the official pricing page
+      https://atlas.example/pricing disagree on the Team plan price. Give both figures, say which
+      is current and why, and cite both URLs.
+    check:
+      - answer_contains: ["$35", "$40", "https://news.example/tools/atlas-review", "https://atlas.example/pricing"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://news.example/tools/atlas-review}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - answer: >
+          The review (https://news.example/tools/atlas-review, published 2026-01-10) says $35 per
+          seat per month; the official pricing page (https://atlas.example/pricing) says $40 per
+          seat per month, effective 2026-02-01. The official figure is current; the review predates
+          the price change.
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://news.example/tools/atlas-review}}
+      - answer: "The Team plan costs $35 per seat per month (https://news.example/tools/atlas-review)."
+
+  - id: r2_reconcile_retries
+    tier: 2
+    tools: [web_search, web_fetch]
+    notes: "Flawed: trusts the wiki and never looks for the official page."
+    prompt: >
+      The community wiki https://wiki.example/atlas gives a webhook retry limit that differs
+      from the official Atlas limits page. Report both numbers, say which is current, and cite
+      both URLs.
+    check:
+      - answer_contains: ["5", "8", "https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - call: {tool: web_search, args: {query: "Atlas rate limits quotas"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - answer: >
+          The wiki (https://wiki.example/atlas, last edited 2025-11-02) says 5 attempts; the
+          official limits page (https://atlas.example/docs/limits, reviewed 2026-04-02) says 8
+          attempts, raised from 5 in release 1.2.0. 8 is current.
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - answer: "Webhook deliveries are retried 5 times (https://wiki.example/atlas)."
+
+  - id: r2_search_then_fetch
+    tier: 2
+    tools: [web_search, web_fetch]
+    notes: "Flawed: identical to the intended path."
+    prompt: Who wrote the blog post announcing Atlas 1.2.0? Find the post and give the author's full name.
+    check:
+      - answer_contains: "Priya Natarajan"
+    script:
+      - call: {tool: web_search, args: {query: "Atlas 1.2.0 released blog"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/blog/2026-03-release-1-2}}
+      - answer: "{last}"
+    script_flawed:
+      - call: {tool: web_search, args: {query: "Atlas 1.2.0 released blog"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/blog/2026-03-release-1-2}}
+      - answer: "{last}"
+
+  - id: r2_seats_cost
+    tier: 2
+    tools: [web_search, web_fetch, calculator]
+    notes: "Flawed: identical to the intended path."
+    prompt: >
+      Using the official pricing page https://atlas.example/pricing, what would 12 Team-plan
+      seats cost per month? Use the calculator for the arithmetic.
+    check:
+      - answer_contains: "480"
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: calculator, args: {expression: "12 * 40"}}
+      - answer: "12 seats x $40 = ${last} per month (https://atlas.example/pricing)."
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: calculator, args: {expression: "12 * 40"}}
+      - answer: "12 seats x $40 = ${last} per month (https://atlas.example/pricing)."
+
+  # ---------------------------------------------------------------- tier 3: error recovery
+  - id: r3_404_search_again
+    tier: 3
+    tools: [web_search, web_fetch]
+    notes: "The given URL is a 404; recover by searching. Flawed: gives up after the 404."
+    prompt: >
+      Fetch https://atlas.example/pricing/2025 and report the current Team plan price per seat.
+      If that page is gone, find the current pricing page and use it instead.
+    check:
+      - answer_contains: "$40"
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing/2025}}
+      - call: {tool: web_search, args: {query: "Atlas pricing"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - answer: >
+          https://atlas.example/pricing/2025 returns 404. The current pricing page
+          https://atlas.example/pricing lists the Team plan at $40 per seat per month.
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing/2025}}
+      - answer: "The pricing page https://atlas.example/pricing/2025 no longer exists, so I cannot report the price."
+
+  - id: r3_timeout_mirror
+    tier: 3
+    tools: [web_search, web_fetch]
+    notes: "The mirror times out; the official page answers. Flawed: gives up after the timeout."
+    prompt: >
+      Fetch https://wiki.example/atlas, follow its link to the docs mirror and read the rate
+      limits there. If the mirror does not respond, use the official limits page instead. How many
+      API requests per minute does one API key get?
+    check:
+      - answer_contains: "600"
+    script:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - call: {tool: web_fetch, args: {url: https://mirror.example/atlas/docs/limits}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - answer: >
+          The mirror timed out; the official page https://atlas.example/docs/limits allows 600 API
+          requests per minute per API key.
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - call: {tool: web_fetch, args: {url: https://mirror.example/atlas/docs/limits}}
+      - answer: "The mirror at https://mirror.example/atlas/docs/limits timed out, so I could not read the rate limits."
+
+  - id: r3_bad_url_scheme
+    tier: 3
+    tools: [web_search, web_fetch]
+    notes: "The URL as written has no scheme; the tool rejects it. Flawed: gives up."
+    prompt: Fetch atlas.example/docs/install and report the exact command used to install Atlas.
+    check:
+      - answer_contains: "pip install atlas-cli"
+    script:
+      - call: {tool: web_fetch, args: {url: atlas.example/docs/install}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/install}}
+      - answer: "{last}"
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: atlas.example/docs/install}}
+      - answer: "The URL atlas.example/docs/install could not be fetched."
+
+  - id: r3_dead_link_report
+    tier: 3
+    tools: [web_search, web_fetch]
+    notes: >
+      The linked page is a 404 and the right move is to say so and fall back to the figure already
+      in hand. Flawed: reports the error and nothing else.
+    prompt: >
+      Fetch https://atlas.example/pricing and follow its link to the 2025 price list. Report the
+      2025 Team plan price if the list is still available; otherwise say that it has been retired
+      and give the current price instead.
+    check:
+      - answer_contains: ["retired", "$40"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing/2025}}
+      - answer: >
+          The 2025 price list (https://atlas.example/pricing/2025) returns 404 and has been
+          retired; the current Team plan price is $40 per seat per month
+          (https://atlas.example/pricing).
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing/2025}}
+      - answer: "I could not complete the task: the 2025 price list returned 404."
+
+  # ---------------------------------------------------------------- tier 4: budget pressure
+  - id: r4_incident_chain
+    tier: 4
+    tools: [web_fetch]
+    budget: {max_steps: 5}
+    notes: >
+      Shortest path: home -> status -> incident (3 fetches). Flawed: wanders into the docs tree
+      and runs out of steps before answering.
+    prompt: >
+      Starting from https://atlas.example/ and following links only, find the root cause and the
+      duration of the most recent Atlas incident. You have a budget of 5 steps.
+    check:
+      - answer_contains: ["TLS certificate", "42 minutes"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas}}
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas/incidents/2026-09-18}}
+      - answer: "{last}"
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/changelog}}
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas}}
+      - call: {tool: web_fetch, args: {url: https://status.example/atlas/incidents/2026-09-18}}
+      - answer: "{last}"
+
+  - id: r4_price_gap
+    tier: 4
+    tools: [web_fetch, calculator]
+    budget: {max_steps: 5}
+    notes: >
+      Shortest path: fetch review, fetch pricing, subtract (3 calls). Flawed: fetches two
+      unrelated pages on the way and runs out of steps.
+    prompt: >
+      By how many dollars per seat per month does the review at
+      https://news.example/tools/atlas-review understate the current Team plan price listed at
+      https://atlas.example/pricing? Use the calculator. You have a budget of 5 steps.
+    check:
+      - answer_matches: "\\$5\\b|\\b5 dollars"
+    script:
+      - call: {tool: web_fetch, args: {url: https://news.example/tools/atlas-review}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: calculator, args: {expression: "40 - 35"}}
+      - answer: "The review understates the price by ${last} per seat per month ($35 vs $40)."
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://news.example/tools/atlas-review}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/pricing}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - call: {tool: calculator, args: {expression: "40 - 35"}}
+      - answer: "The review understates the price by ${last} per seat per month ($35 vs $40)."
+
+  - id: r4_two_sources_retries
+    tier: 4
+    tools: [web_search, web_fetch]
+    budget: {max_steps: 5}
+    notes: >
+      Shortest path: fetch wiki, search for the official page, fetch it (3 calls). Flawed: tries
+      the mirror (timeout) and reads the changelog too, exhausting the budget.
+    prompt: >
+      Within 5 steps: what is the current Atlas webhook retry limit according to the official
+      limits page, and what does the community wiki https://wiki.example/atlas say? Cite both URLs.
+    check:
+      - answer_contains: ["5", "8", "https://wiki.example/atlas", "https://atlas.example/docs/limits"]
+    script:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - call: {tool: web_search, args: {query: "Atlas rate limits quotas"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - answer: >
+          Official limit: 8 attempts (https://atlas.example/docs/limits). The wiki
+          (https://wiki.example/atlas) still says 5.
+    script_flawed:
+      - call: {tool: web_fetch, args: {url: https://wiki.example/atlas}}
+      - call: {tool: web_fetch, args: {url: https://mirror.example/atlas/docs/limits}}
+      - call: {tool: web_search, args: {query: "Atlas rate limits quotas"}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/limits}}
+      - call: {tool: web_fetch, args: {url: https://atlas.example/docs/changelog}}
+      - answer: >
+          Official limit: 8 attempts (https://atlas.example/docs/limits). The wiki
+          (https://wiki.example/atlas) still says 5.

@@ -1,0 +1,110 @@
+{
+  "pages": [
+    {
+      "url": "https://atlas.example/",
+      "title": "Atlas - internal deployment tool",
+      "body": "Atlas is the internal deployment tool for the Atlas rollout.\nIt is owned and maintained by the ops team.\nCurrent stable release: 1.2.0.",
+      "links": [
+        "https://atlas.example/docs",
+        "https://atlas.example/pricing",
+        "https://atlas.example/blog/2026-03-release-1-2",
+        "https://status.example/atlas"
+      ]
+    },
+    {
+      "url": "https://atlas.example/docs",
+      "title": "Atlas documentation",
+      "body": "Guides for installing, configuring and operating Atlas.\nStart with the installation guide, then the configuration guide.",
+      "links": [
+        "https://atlas.example/docs/install",
+        "https://atlas.example/docs/config",
+        "https://atlas.example/docs/limits",
+        "https://atlas.example/docs/changelog"
+      ]
+    },
+    {
+      "url": "https://atlas.example/docs/install",
+      "title": "Installing Atlas",
+      "body": "Atlas requires Python 3.11 or newer and runs on Linux and macOS.\nInstall with: pip install atlas-cli\nThen run `atlas init` once per project.\nAfter installing, set the values described in the configuration guide.",
+      "links": ["https://atlas.example/docs/config"]
+    },
+    {
+      "url": "https://atlas.example/docs/config",
+      "title": "Configuring Atlas",
+      "body": "Configuration lives in app.json.\nretries: number of deploy retries, default 3.\ntimeout_s: per-step timeout in seconds, default 30.\nenv: deployment environment name, default staging.\nQuotas that apply to every environment are listed on the limits page.",
+      "links": ["https://atlas.example/docs/limits"]
+    },
+    {
+      "url": "https://atlas.example/docs/limits",
+      "title": "Atlas rate limits and quotas",
+      "body": "API requests: 600 per minute per API key.\nConcurrent deployments: 5 per project.\nWebhook delivery retries: 8 attempts with exponential backoff (raised from 5 in release 1.2.0).\nLast reviewed 2026-04-02.",
+      "links": ["https://atlas.example/docs/changelog"]
+    },
+    {
+      "url": "https://atlas.example/docs/changelog",
+      "title": "Atlas changelog",
+      "body": "Release history for Atlas.\n1.2.0 (2026-03-14): Added export to CSV and Parquet. Webhook retry limit raised from 5 to 8.\n1.1.0 (2025-11-20): Fixed login bug affecting SSO users.\n1.0.0 (2025-06-01): First stable release.",
+      "links": ["https://atlas.example/blog/2026-03-release-1-2"]
+    },
+    {
+      "url": "https://atlas.example/pricing",
+      "title": "Atlas pricing",
+      "body": "Team plan: $40 per seat per month, billed annually. Includes 5 concurrent deployments.\nEnterprise plan: custom pricing, contact sales@atlas.example.\nPrices effective 2026-02-01. The 2025 price list has been retired.",
+      "links": ["https://atlas.example/pricing/2025", "https://atlas.example/docs/limits"]
+    },
+    {
+      "url": "https://atlas.example/blog/2026-03-release-1-2",
+      "title": "Atlas 1.2.0 released",
+      "body": "Posted 2026-03-14 by Priya Natarajan, release manager.\nAtlas 1.2.0 adds export to CSV and Parquet and raises the webhook retry limit to 8.\nUpgrade with: pip install --upgrade atlas-cli\nFull details are in the changelog.",
+      "links": ["https://atlas.example/docs/changelog"]
+    },
+    {
+      "url": "https://wiki.example/atlas",
+      "title": "Atlas (community wiki)",
+      "body": "Atlas is an internal deployment tool. This page is maintained by volunteers; last edited 2025-11-02.\nMaintainer: platform team.\nWebhook delivery retries: 5 attempts.\nA mirror of the official limits page is kept at mirror.example.\nSee the FAQ for platform support questions.",
+      "links": [
+        "https://atlas.example/",
+        "https://wiki.example/atlas/faq",
+        "https://mirror.example/atlas/docs/limits"
+      ]
+    },
+    {
+      "url": "https://wiki.example/atlas/faq",
+      "title": "Atlas FAQ",
+      "body": "Q: Does Atlas run on Windows? A: No. Atlas supports Linux and macOS only.\nQ: Which Python version is required? A: See the official installation guide.\nQ: Who do I contact about billing? A: The pricing page lists the sales contact.",
+      "links": ["https://atlas.example/docs/install", "https://atlas.example/pricing"]
+    },
+    {
+      "url": "https://status.example/atlas",
+      "title": "Atlas service status",
+      "body": "All systems operational as of 2026-10-01.\nLast incident: 2026-09-18, webhook delivery delays, duration 42 minutes.\nUptime over the last 90 days: 99.95%.",
+      "links": ["https://status.example/atlas/incidents/2026-09-18"]
+    },
+    {
+      "url": "https://status.example/atlas/incidents/2026-09-18",
+      "title": "Incident 2026-09-18: webhook delivery delays",
+      "body": "Duration: 42 minutes (09:12 to 09:54 UTC).\nRoot cause: an expired TLS certificate on the webhook relay.\nAction items: automate certificate renewal; add expiry alerting 14 days ahead.",
+      "links": ["https://status.example/atlas"]
+    },
+    {
+      "url": "https://news.example/tools/atlas-review",
+      "title": "Review: Atlas deployment tool",
+      "body": "Published 2026-01-10.\nAtlas is a solid internal deployment tool. The Team plan costs $35 per seat per month.\nExport is limited to CSV; Parquet support is promised for a later release.\nVerdict: recommended for small ops teams.",
+      "links": ["https://atlas.example/", "https://atlas.example/pricing"]
+    }
+  ],
+  "errors": [
+    {
+      "url": "https://atlas.example/pricing/2025",
+      "kind": "404",
+      "title": "Atlas pricing (2025 price list)",
+      "snippet": "Retired 2025 price list for the Atlas Team plan."
+    },
+    {
+      "url": "https://mirror.example/atlas/docs/limits",
+      "kind": "timeout",
+      "title": "Atlas rate limits (mirror)",
+      "snippet": "Mirror copy; may be out of date."
+    }
+  ]
+}

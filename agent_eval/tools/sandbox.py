@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from agent_eval.tools.filesystem import InMemoryFS
     from agent_eval.tools.tickets import TicketStore
+    from agent_eval.tools.web import WebStore
 
 SEED_FILES: dict[str, str] = {
     "/docs/readme.txt": "Project Atlas\nInternal notes for the Atlas rollout.\nOwner: ops team\n",
@@ -26,17 +27,31 @@ SEED_FILES: dict[str, str] = {
 class Sandbox:
     fs: InMemoryFS
     tickets: TicketStore
+    web: WebStore
 
     @classmethod
     def fresh(
-        cls, extra_files: dict[str, str] | None = None, fixture: Path | None = None
+        cls,
+        extra_files: dict[str, str] | None = None,
+        fixture: Path | None = None,
+        web_fixture: Path | None = None,
     ) -> Sandbox:
         from agent_eval.tools.filesystem import InMemoryFS
         from agent_eval.tools.tickets import FIXTURE, TicketStore
+        from agent_eval.tools.web import FIXTURE as WEB_FIXTURE
+        from agent_eval.tools.web import WebStore
 
         files = dict(SEED_FILES)
         files.update(extra_files or {})
-        return cls(fs=InMemoryFS(files), tickets=TicketStore.from_fixture(fixture or FIXTURE))
+        return cls(
+            fs=InMemoryFS(files),
+            tickets=TicketStore.from_fixture(fixture or FIXTURE),
+            web=WebStore.from_fixture(web_fixture or WEB_FIXTURE),
+        )
 
     def snapshot(self) -> dict[str, Any]:
-        return {"files": dict(self.fs.files), "tickets": dict(self.tickets.tickets)}
+        return {
+            "files": dict(self.fs.files),
+            "tickets": dict(self.tickets.tickets),
+            "web_fetched": list(self.web.fetched),
+        }

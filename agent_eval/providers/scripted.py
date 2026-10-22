@@ -1,10 +1,11 @@
 """Deterministic replay providers so the whole suite runs offline.
 
 ``scripted`` follows each task's ``script`` exactly (including the recovery steps written
-into tier-3 scripts). ``scripted_flawed`` models two common agent failures: on scripts with
-three or more tool calls it drops the last tool call before the final answer, and after any
-tool error it gives up instead of recovering. Neither is a model; both are baselines that
-exercise the harness and give the report a non-trivial failure breakdown.
+into tier-3 scripts). ``scripted_flawed`` replays a task's ``script_flawed`` verbatim when the
+suite declares one; otherwise it derives a flawed run from ``script`` with two generic flaws:
+on scripts with three or more tool calls it drops the last tool call before the final answer,
+and after any tool error it gives up instead of recovering. Neither is a model; both are
+baselines that exercise the harness and give the report a non-trivial failure breakdown.
 """
 
 from __future__ import annotations
@@ -53,16 +54,23 @@ class ScriptedProvider:
         self.name = "scripted_flawed" if flawed else "scripted"
         self.model = "replay-v1"
         self._steps: list[dict[str, Any]] = []
+        self._explicit = False  # True when replaying a declared script_flawed verbatim
 
     def start_task(self, task: Task) -> None:
-        self._steps = flawed_script(task.script) if self.flawed else list(task.script)
+        self._explicit = self.flawed and task.script_flawed is not None
+        if self._explicit:
+            self._steps = list(task.script_flawed or [])
+        elif self.flawed:
+            self._steps = flawed_script(task.script)
+        else:
+            self._steps = list(task.script)
 
     def complete(self, messages: list[Message], tools: list[dict[str, Any]]) -> ProviderResponse:
         results = [r for m in messages if m.role == "tool" for r in m.tool_results]
         turn = sum(1 for m in messages if m.role == "assistant")
         in_tokens = estimate_message_tokens(messages, tools)
 
-        if self.flawed and results and results[-1].is_error:
+        if self.flawed and not self._explicit and results and results[-1].is_error:
             text = f"I could not complete the task because a tool failed: {results[-1].content}"
             return self._text(text, in_tokens)
         if turn >= len(self._steps):
